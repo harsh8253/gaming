@@ -7,18 +7,28 @@ const ROLE_PERMISSIONS: Record<Role, Permission[]> = {
     Permission.USER_CREATE,
     Permission.USER_LIST,
     Permission.USER_READ,
+    Permission.LEDGER_POST,
+    Permission.LEDGER_READ,
   ],
   [Role.SUPER_ADMIN]: [
     Permission.USER_CREATE,
     Permission.USER_LIST,
     Permission.USER_READ,
+    Permission.LEDGER_POST,
+    Permission.LEDGER_READ,
   ],
   [Role.MASTER]: [
     Permission.USER_CREATE,
     Permission.USER_LIST,
     Permission.USER_READ,
+    Permission.LEDGER_POST,
+    Permission.LEDGER_READ,
   ],
-  [Role.CLIENT]: [Permission.USER_LIST, Permission.USER_READ],
+  [Role.CLIENT]: [
+    Permission.USER_LIST,
+    Permission.USER_READ,
+    Permission.LEDGER_READ,
+  ],
 };
 
 const CREATABLE_ROLES: Record<Role, Role[]> = {
