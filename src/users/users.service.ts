@@ -75,6 +75,7 @@ export class UsersService implements OnModuleInit {
     actor: UserRecord,
     dto: CreateUserDto,
   ): Promise<PublicUser> {
+    this.authorization.assertPermission(actor.role, Permission.USER_CREATE);
     this.authorization.assertCanCreate(actor.role, dto.role);
 
     const taken = await this.users.findByUsername(dto.username);
