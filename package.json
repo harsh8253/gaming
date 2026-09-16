@@ -1,7 +1,7 @@
 {
   "name": "wagering-api",
   "version": "0.0.1",
-  "description": "Hierarchical betting platform — auth and hierarchy scope slice",
+  "description": "Hierarchical betting platform — auth, hierarchy, and double-entry ledger",
   "author": "",
   "private": true,
   "license": "UNLICENSED",
@@ -18,9 +18,10 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json --runInBand",
-    "prove:scope": "jest --config ./test/jest-e2e.json --runInBand",
+    "prove:scope": "jest --config ./test/jest-e2e.json --runInBand --testPathPatterns=hierarchy-scope",
     "prisma:generate": "DATABASE_URL=\"${DATABASE_URL:-postgresql://wagering:wagering@localhost:5432/wagering?schema=public}\" prisma generate",
-    "prisma:migrate": "prisma migrate deploy"
+    "prisma:migrate": "prisma migrate deploy",
+    "prove:ledger": "jest --config ./test/jest-e2e.json --runInBand --testPathPatterns=ledger"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",

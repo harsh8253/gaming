@@ -1,8 +1,8 @@
 # Hierarchical Betting Platform
 
-Wagering platform (Super Master → Super Admin → Master → Client). This repository currently contains **slice 1 only**: auth plus hierarchy scope isolation.
+Wagering platform (Super Master → Super Admin → Master → Client). This repository currently contains **slice 1** (auth + hierarchy scope) and **slice 2** (double-entry ledger).
 
-Later domains — matches, betting, ledger, cash, commission — are out of scope.
+Later domains — matches, betting, cash, commission — are out of scope.
 
 ## Slice 1
 
@@ -25,6 +25,35 @@ Single `users` model (`role`, `parent_user_id`, `organization_id`). Identity com
 
 Bootstrap Super Master (empty store): `root` / `changeme`.
 
+## Slice 2 — double-entry ledger
+
+Journals are the source of truth. Each journal has two or more legs; total debits must equal total credits. Posted journals and lines are immutable; corrections are new reversal journals. Account balances are **derived** as `sum(credits) - sum(debits)` and are never stored as a mutable field.
+
+Hierarchy scope from S1 applies to every account on every line. `postedByUserId` and `organizationId` always come from the session actor — body actor ids are ignored/stripped.
+
+### Ledger API
+
+| Method | Path | Auth | Notes |
+| --- | --- | --- | --- |
+| `POST` | `/ledger/journals` | bearer + `Idempotency-Key` | Post a balanced journal; retries with the same key return the same journal |
+| `POST` | `/ledger/journals/:id/reverse` | bearer + `Idempotency-Key` | Post an opposite-leg reversal journal |
+| `GET` | `/ledger/balances/:userId` | bearer | Derived balance for an in-scope account (`403` if outside) |
+| `GET` | `/ledger/entries?accountUserId=` | bearer | List journal lines in scope (optional account filter) |
+
+Example post body:
+
+```json
+{
+  "description": "seed client wallet",
+  "lines": [
+    { "accountUserId": "<master-id>", "side": "DEBIT", "amount": 1000 },
+    { "accountUserId": "<client-id>", "side": "CREDIT", "amount": 1000 }
+  ]
+}
+```
+
+Amounts are positive integers (minor units). Roles with `ledger:post`: Super Master, Super Admin, Master. All roles may `ledger:read` within hierarchy scope.
+
 ## Run locally
 
 ```bash
@@ -32,7 +61,7 @@ npm install
 npm run start:dev
 ```
 
-No database required for this slice. Persistence defaults to an in-memory user store.
+No database required for these slices. Persistence defaults to in-memory stores for users and the ledger.
 
 PostgreSQL is the source of truth. To use it:
 
@@ -44,17 +73,20 @@ npx prisma migrate deploy
 npm run start:dev
 ```
 
-`DATABASE_URL` in `.env` switches the users repository to Prisma/Postgres.
+`DATABASE_URL` in `.env` switches the users and ledger repositories to Prisma/Postgres.
 
-## Prove hierarchy isolation
+## Prove hierarchy isolation and ledger
 
 ```bash
-npm test          # unit tests (scope + permissions)
-npm run prove:scope
+npm test            # unit tests (scope, permissions, ledger math)
+npm run prove:scope # HTTP e2e — hierarchy isolation
+npm run prove:ledger
 ```
 
-`prove:scope` is an HTTP e2e suite against the real Nest API. It asserts:
+`prove:ledger` asserts:
 
-1. Same client, wrong parent Master → `403`
-2. Frontend-supplied `user_id` / `master_id` / `parent_user_id` / `organization_id` are ignored; parent and org come from the session
-3. Login identity comes from username/password + token, not body ids
+1. Balanced journal post succeeds
+2. Unbalanced journal is rejected
+3. Idempotent retry with the same `Idempotency-Key` does not double-post
+4. Out-of-scope account access → `403`
+5. Balance equals the sum of that account's credit/debit lines

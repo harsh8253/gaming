@@ -48,6 +48,10 @@ export class UsersService implements OnModuleInit {
     return this.users.findByUsername(username);
   }
 
+  listAllRecords(): Promise<UserRecord[]> {
+    return this.users.listAll();
+  }
+
   async listInScope(actor: UserRecord): Promise<PublicUser[]> {
     this.authorization.assertPermission(actor.role, Permission.USER_LIST);
     const users = await this.users.listAll();
@@ -71,7 +75,6 @@ export class UsersService implements OnModuleInit {
     actor: UserRecord,
     dto: CreateUserDto,
   ): Promise<PublicUser> {
-    this.authorization.assertPermission(actor.role, Permission.USER_CREATE);
     this.authorization.assertCanCreate(actor.role, dto.role);
 
     const taken = await this.users.findByUsername(dto.username);
