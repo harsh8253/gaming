@@ -14,6 +14,11 @@ enum Role {
   CLIENT
 }
 
+enum LedgerSide {
+  DEBIT
+  CREDIT
+}
+
 model User {
   id             String   @id @default(cuid())
   username       String   @unique
@@ -30,4 +35,37 @@ model User {
   @@index([organizationId])
   @@index([role])
   @@map("users")
+}
+
+model Journal {
+  id             String        @id @default(cuid())
+  idempotencyKey String
+  organizationId String
+  postedByUserId String
+  description    String?
+  reversalOfId   String?
+  reversalOf     Journal?      @relation("JournalReversal", fields: [reversalOfId], references: [id])
+  reversals      Journal[]     @relation("JournalReversal")
+  createdAt      DateTime      @default(now())
+  lines          JournalLine[]
+
+  @@unique([organizationId, idempotencyKey])
+  @@index([organizationId])
+  @@index([postedByUserId])
+  @@index([reversalOfId])
+  @@map("journals")
+}
+
+model JournalLine {
+  id            String     @id @default(cuid())
+  journalId     String
+  journal       Journal    @relation(fields: [journalId], references: [id], onDelete: Restrict)
+  accountUserId String
+  side          LedgerSide
+  amount        Int
+  createdAt     DateTime   @default(now())
+
+  @@index([accountUserId])
+  @@index([journalId])
+  @@map("journal_lines")
 }
