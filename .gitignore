@@ -1,0 +1,21 @@
+# compiled / deps
+/dist
+/node_modules
+/build
+/coverage
+
+# logs
+logs
+*.log
+npm-debug.log*
+
+# env and local data
+.env
+.env.*.local
+*.sqlite
+*.db
+
+# IDE
+.idea
+.vscode
+*.swp
