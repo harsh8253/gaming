@@ -56,15 +56,23 @@ export class UsersService implements OnModuleInit {
 
   async getInScope(actor: UserRecord, id: string): Promise<PublicUser> {
     this.authorization.assertPermission(actor.role, Permission.USER_READ);
+    const target = await this.requireVisibleUser(actor, id);
+    return toPublicUser(target);
+  }
+
+  async requireVisibleUser(
+    actor: UserRecord,
+    userId: string,
+  ): Promise<UserRecord> {
     const users = await this.users.listAll();
-    const target = users.find((user) => user.id === id);
+    const target = users.find((user) => user.id === userId);
     if (!target) {
       throw new NotFoundException('User not found');
     }
     if (!this.hierarchy.isInScope(actor, target, users)) {
       throw new ForbiddenException('Resource is outside hierarchy scope');
     }
-    return toPublicUser(target);
+    return target;
   }
 
   async createInScope(

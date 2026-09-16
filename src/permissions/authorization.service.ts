@@ -2,23 +2,38 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 import { Role } from '../users/user.types';
 import { Permission } from './permissions';
 
+const LEDGER_WRITE = [
+  Permission.ACCOUNT_OPEN,
+  Permission.ACCOUNT_READ,
+  Permission.LEDGER_POST,
+  Permission.LEDGER_READ,
+];
+
 const ROLE_PERMISSIONS: Record<Role, Permission[]> = {
   [Role.SUPER_MASTER]: [
     Permission.USER_CREATE,
     Permission.USER_LIST,
     Permission.USER_READ,
+    ...LEDGER_WRITE,
   ],
   [Role.SUPER_ADMIN]: [
     Permission.USER_CREATE,
     Permission.USER_LIST,
     Permission.USER_READ,
+    ...LEDGER_WRITE,
   ],
   [Role.MASTER]: [
     Permission.USER_CREATE,
     Permission.USER_LIST,
     Permission.USER_READ,
+    ...LEDGER_WRITE,
   ],
-  [Role.CLIENT]: [Permission.USER_LIST, Permission.USER_READ],
+  [Role.CLIENT]: [
+    Permission.USER_LIST,
+    Permission.USER_READ,
+    Permission.ACCOUNT_READ,
+    Permission.LEDGER_READ,
+  ],
 };
 
 const CREATABLE_ROLES: Record<Role, Role[]> = {

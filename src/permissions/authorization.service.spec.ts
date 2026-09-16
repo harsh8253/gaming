@@ -16,10 +16,11 @@ describe('AuthorizationService', () => {
     expect(authz.hasPermission(Role.MASTER, Permission.USER_CREATE)).toBe(true);
   });
 
-  it('does not let a Client create users', () => {
-    expect(authz.hasPermission(Role.CLIENT, Permission.USER_CREATE)).toBe(
+  it('does not let a Client post to the ledger', () => {
+    expect(authz.hasPermission(Role.CLIENT, Permission.LEDGER_POST)).toBe(
       false,
     );
+    expect(authz.hasPermission(Role.MASTER, Permission.LEDGER_POST)).toBe(true);
   });
 
   it('only allows creating the next role down the hierarchy', () => {

@@ -14,20 +14,93 @@ enum Role {
   CLIENT
 }
 
+enum AccountType {
+  ASSET
+  LIABILITY
+  EQUITY
+  REVENUE
+  EXPENSE
+}
+
+enum EntryDirection {
+  DEBIT
+  CREDIT
+}
+
 model User {
-  id             String   @id @default(cuid())
-  username       String   @unique
-  passwordHash   String
-  role           Role
-  parentUserId   String?
-  parent         User?    @relation("UserHierarchy", fields: [parentUserId], references: [id])
-  children       User[]   @relation("UserHierarchy")
-  organizationId String
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  id                       String               @id @default(cuid())
+  username                 String               @unique
+  passwordHash             String
+  role                     Role
+  parentUserId             String?
+  parent                   User?                @relation("UserHierarchy", fields: [parentUserId], references: [id])
+  children                 User[]               @relation("UserHierarchy")
+  organizationId           String
+  createdAt                DateTime             @default(now())
+  updatedAt                DateTime             @updatedAt
+  accounts                 Account[]
+  postedLedgerTransactions LedgerTransaction[]  @relation("UserPostedLedger")
 
   @@index([parentUserId])
   @@index([organizationId])
   @@index([role])
   @@map("users")
+}
+
+model Account {
+  id             String        @id @default(cuid())
+  ownerUserId    String
+  owner          User          @relation(fields: [ownerUserId], references: [id])
+  code           String
+  type           AccountType
+  currency       String        @default("USD")
+  organizationId String
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  entries        LedgerEntry[]
+
+  @@unique([ownerUserId, code, currency])
+  @@index([ownerUserId])
+  @@index([organizationId])
+  @@map("accounts")
+}
+
+model LedgerTransaction {
+  id                     String              @id @default(cuid())
+  idempotencyKey         String
+  postedByUserId         String
+  postedBy               User                @relation("UserPostedLedger", fields: [postedByUserId], references: [id])
+  sourceEventType        String
+  sourceEventId          String
+  reversesTransactionId  String?
+  reverses               LedgerTransaction?  @relation("LedgerReversal", fields: [reversesTransactionId], references: [id])
+  reversedBy             LedgerTransaction[] @relation("LedgerReversal")
+  description            String              @default("")
+  organizationId         String
+  createdAt              DateTime            @default(now())
+  entries                LedgerEntry[]
+
+  @@unique([postedByUserId, idempotencyKey])
+  @@index([sourceEventType, sourceEventId])
+  @@index([postedByUserId])
+  @@index([reversesTransactionId])
+  @@map("ledger_transactions")
+}
+
+model LedgerEntry {
+  id              String             @id @default(cuid())
+  transactionId   String
+  transaction     LedgerTransaction  @relation(fields: [transactionId], references: [id])
+  accountId       String
+  account         Account            @relation(fields: [accountId], references: [id])
+  direction       EntryDirection
+  amountMinor     Int
+  sourceEventType String
+  sourceEventId   String
+  createdAt       DateTime           @default(now())
+
+  @@index([accountId])
+  @@index([transactionId])
+  @@index([sourceEventType, sourceEventId])
+  @@map("ledger_entries")
 }
