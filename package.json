@@ -21,7 +21,9 @@
     "prove:scope": "jest --config ./test/jest-e2e.json --runInBand --testPathPatterns=hierarchy-scope",
     "prisma:generate": "DATABASE_URL=\"${DATABASE_URL:-postgresql://wagering:wagering@localhost:5432/wagering?schema=public}\" prisma generate",
     "prisma:migrate": "prisma migrate deploy",
-    "prove:ledger": "jest --config ./test/jest-e2e.json --runInBand --testPathPatterns=ledger"
+    "prove:ledger": "jest --config ./test/jest-e2e.json --runInBand --testPathPatterns=ledger",
+    "frontend:dev": "npm --prefix frontend run dev",
+    "frontend:build": "npm --prefix frontend run build"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",

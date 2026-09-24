@@ -61,6 +61,16 @@ npm install
 npm run start:dev
 ```
 
+Frontend (separate terminal):
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Open **http://localhost:5173** — Vite proxies API calls to the Nest server on port 3000.
+
 No database required for these slices. Persistence defaults to in-memory stores for users and the ledger.
 
 PostgreSQL is the source of truth. To use it:

@@ -3,6 +3,8 @@
 /node_modules
 /build
 /coverage
+/frontend/dist
+/frontend/node_modules
 
 # logs
 logs

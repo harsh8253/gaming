@@ -1,0 +1,178 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-display: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Source Sans 3', ui-sans-serif, system-ui, sans-serif;
+
+  --color-ink: #0a0a0a;
+  --color-ink-soft: #525252;
+  --color-paper: #f4f4f5;
+  --color-panel: #ffffff;
+  --color-line: #e4e4e7;
+  --color-blue: #1d4ed8;
+  --color-blue-bright: #1e40af;
+  --color-blue-soft: #eff6ff;
+  --color-danger: #b91c1c;
+  --color-ok: #1d4ed8;
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html,
+  body,
+  #root {
+    min-height: 100%;
+  }
+
+  body {
+    margin: 0;
+    font-family: var(--font-sans);
+    color: var(--color-ink);
+    background: var(--color-paper);
+    background-attachment: fixed;
+    caret-color: var(--color-blue);
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--color-blue) 28%, white);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-blue);
+    outline-offset: 2px;
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+  }
+
+  input,
+  select,
+  textarea {
+    accent-color: var(--color-blue);
+  }
+
+  code {
+    font-family: ui-monospace, 'Cascadia Code', 'Segoe UI Mono', monospace;
+    font-size: 0.92em;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #a1a1aa transparent;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: var(--font-display);
+  }
+
+  .surface {
+    background: var(--color-panel);
+    border: 1px solid var(--color-line);
+    box-shadow: 0 1px 2px rgb(10 10 10 / 0.04);
+  }
+
+  .field {
+    width: 100%;
+    min-height: 2.75rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--color-line);
+    background: white;
+    padding: 0.625rem 0.75rem;
+    color: var(--color-ink);
+    outline: none;
+  }
+
+  .field:focus {
+    border-color: var(--color-blue);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-blue) 22%, transparent);
+  }
+
+  .btn-primary {
+    border-radius: 0.5rem;
+    background: var(--color-blue);
+    min-height: 2.75rem;
+    padding: 0.625rem 1rem;
+    font-weight: 600;
+    color: white;
+    transition: background-color 120ms ease-out;
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    background: var(--color-blue-bright);
+  }
+
+  .btn-primary:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  .btn-secondary {
+    border-radius: 0.5rem;
+    border: 1px solid var(--color-line);
+    background: white;
+    padding: 0.5rem 0.75rem;
+    font-weight: 600;
+    color: var(--color-ink);
+    transition: background-color 120ms ease-out;
+  }
+
+  .btn-secondary:hover:not(:disabled) {
+    background: var(--color-paper);
+  }
+
+  .link-blue {
+    font-weight: 600;
+    color: var(--color-blue);
+  }
+
+  .link-blue:hover {
+    color: var(--color-blue-bright);
+  }
+
+  .login-font {
+    font-family:
+      Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+      sans-serif;
+  }
+
+  .login-sheet {
+    isolation: isolate;
+    box-shadow:
+      0 -18px 40px -18px rgb(15 42 69 / 0.14),
+      0 -4px 12px -6px rgb(15 42 69 / 0.06);
+  }
+
+  .login-ambient {
+    background:
+      radial-gradient(circle at 18% 18%, rgb(219 234 254 / 0.75) 0%, transparent 45%),
+      radial-gradient(circle at 82% 82%, rgb(191 219 254 / 0.55) 0%, transparent 50%),
+      linear-gradient(135deg, #f7faff 0%, #edf4fd 50%, #e5effc 100%);
+  }
+
+  .login-desktop-card {
+    box-shadow:
+      0 20px 50px -15px rgb(23 43 77 / 0.12),
+      0 4px 16px -2px rgb(23 43 77 / 0.06);
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
