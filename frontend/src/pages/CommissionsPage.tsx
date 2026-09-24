@@ -1,7 +1,7 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { BriefcaseBusiness, PlusCircle, TrendingUp, Users, X } from 'lucide-react';
-import { MetricCard, StatusBadge } from '../components/deskUi';
+import { MetricCard, StackTable, StatusBadge } from '../components/deskUi';
 import type { ShellContext } from '../components/WagerDeskShell';
 import {
   formatINR,
@@ -85,7 +85,7 @@ export function CommissionsPage() {
     <>
       <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <div className="mb-2 flex items-center gap-2">
+          <div className="mb-2 hidden items-center gap-2 sm:flex">
             <span className="rounded-md bg-blue-50 px-2 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-blue-700">
               Super Admin A
             </span>
@@ -116,7 +116,7 @@ export function CommissionsPage() {
           <p className="mt-0.5 text-[11px] text-slate-400">Rate applied to each master's gross volume</p>
         </div>
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[640px] text-left">
+          <StackTable className="w-full min-w-[640px] text-left">
             <thead>
               <tr className="border-b border-slate-100 text-[10px] font-bold uppercase tracking-[0.08em] text-slate-400">
                 <th className="px-5 py-3 font-semibold">Master</th>
@@ -145,7 +145,7 @@ export function CommissionsPage() {
                 </tr>
               ))}
             </tbody>
-          </table>
+          </StackTable>
         </div>
       </section>
 
@@ -155,7 +155,7 @@ export function CommissionsPage() {
           <p className="mt-0.5 text-[11px] text-slate-400">Commission earned per master and period</p>
         </div>
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[640px] text-left">
+          <StackTable className="w-full min-w-[640px] text-left">
             <thead>
               <tr className="border-b border-slate-100 text-[10px] font-bold uppercase tracking-[0.08em] text-slate-400">
                 <th className="px-5 py-3 font-semibold">Master</th>
@@ -193,18 +193,18 @@ export function CommissionsPage() {
                 </tr>
               ))}
             </tbody>
-          </table>
+          </StackTable>
         </div>
       </section>
 
       {selected && (
-        <div className="fixed inset-0 z-40 flex items-center justify-center px-4" role="presentation">
+        <div className="fixed inset-0 z-40 flex items-end justify-center sm:items-center sm:px-4" role="presentation">
           <button
             aria-label="Close rule details"
             onClick={closeDrawer}
             className="absolute inset-0 bg-slate-950/30 backdrop-blur-[1px]"
           />
-          <div role="dialog" aria-modal="true" aria-label={`${selected.master} rule`} className="relative w-full max-w-sm rounded-xl bg-white p-6 shadow-2xl">
+          <div role="dialog" aria-modal="true" aria-label={`${selected.master} rule`} className="relative max-h-[92dvh] w-full overflow-y-auto rounded-t-2xl bg-white p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] shadow-2xl sm:max-w-sm sm:rounded-xl sm:p-6">
             <div className="mb-4 flex items-center justify-between">
               <h3 className="text-[15px] font-semibold text-slate-950">{selected.master}</h3>
               <button
@@ -238,13 +238,13 @@ export function CommissionsPage() {
       )}
 
       {addOpen && (
-        <div className="fixed inset-0 z-40 flex items-center justify-center px-4" role="presentation">
+        <div className="fixed inset-0 z-40 flex items-end justify-center sm:items-center sm:px-4" role="presentation">
           <button
             aria-label="Close add rule form"
             onClick={() => setAddOpen(false)}
             className="absolute inset-0 bg-slate-950/30 backdrop-blur-[1px]"
           />
-          <div role="dialog" aria-modal="true" aria-label="Add commission rule" className="relative w-full max-w-sm rounded-xl bg-white p-6 shadow-2xl">
+          <div role="dialog" aria-modal="true" aria-label="Add commission rule" className="relative max-h-[92dvh] w-full overflow-y-auto rounded-t-2xl bg-white p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] shadow-2xl sm:max-w-sm sm:rounded-xl sm:p-6">
             <div className="mb-4 flex items-center justify-between">
               <h3 className="text-[15px] font-semibold text-slate-950">Add commission rule</h3>
               <button

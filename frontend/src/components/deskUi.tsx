@@ -1,6 +1,28 @@
-import type { ReactNode } from 'react';
+import { useLayoutEffect, useRef, type ReactNode } from 'react';
 import type { Activity } from 'lucide-react';
 import type { ClientTone } from '../lib/mockDesk';
+
+/** A table that reflows into one card per row below the md breakpoint. */
+export function StackTable({ className = '', children }: { className?: string; children: ReactNode }) {
+  const ref = useRef<HTMLTableElement>(null);
+
+  useLayoutEffect(() => {
+    const table = ref.current;
+    if (!table) return;
+    const labels = Array.from(table.querySelectorAll('thead th'), (th) => th.textContent?.trim() ?? '');
+    table.querySelectorAll('tbody tr').forEach((row) => {
+      Array.from(row.children).forEach((cell, index) => {
+        if (labels[index]) cell.setAttribute('data-label', labels[index]);
+      });
+    });
+  });
+
+  return (
+    <table ref={ref} className={`stack-table ${className}`}>
+      {children}
+    </table>
+  );
+}
 
 export function StatusBadge({
   children,
@@ -50,17 +72,17 @@ export function MetricCard({
     green: 'text-emerald-600 bg-emerald-50',
   };
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.02)]">
-      <div className="flex items-start justify-between">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.09em] text-slate-500">
+    <div className="rounded-xl border border-slate-200 bg-white p-3.5 shadow-[0_1px_2px_rgba(15,23,42,0.02)] sm:p-4">
+      <div className="flex items-start justify-between gap-2">
+        <p className="min-w-0 text-[11px] font-semibold uppercase leading-snug tracking-[0.07em] text-slate-500 sm:tracking-[0.09em]">
           {label}
         </p>
-        <span className={`flex size-8 items-center justify-center rounded-lg ${accents[accent]}`}>
-          <Icon size={16} strokeWidth={1.8} />
+        <span className={`flex size-7 shrink-0 items-center justify-center rounded-lg sm:size-8 ${accents[accent]}`}>
+          <Icon size={15} strokeWidth={1.8} />
         </span>
       </div>
-      <div className="mt-3 flex items-baseline gap-2">
-        <p className="text-[22px] font-semibold tracking-tight text-slate-950">{value}</p>
+      <div className="mt-2.5 flex flex-wrap items-baseline gap-x-2 sm:mt-3">
+        <p className="text-[20px] font-semibold tracking-tight tabular-nums text-slate-950 sm:text-[22px]">{value}</p>
         {change && <span className="text-[11px] font-semibold text-emerald-600">{change}</span>}
       </div>
       {sub && <p className="mt-1 text-[11px] text-slate-400">{sub}</p>}

@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState, type FormEvent } from 'react';
 import { api, ApiError } from '../api/client';
+import { StackTable } from '../components/deskUi';
 import {
   canCreateUsers,
   CREATABLE_ROLE,
@@ -52,10 +53,10 @@ export function UsersPage() {
   }
 
   return (
-    <div className="mx-auto max-w-6xl space-y-8">
+    <div className="space-y-6">
       <header>
-        <h1 className="font-display text-3xl font-bold tracking-tight">Hierarchy</h1>
-        <p className="mt-2 max-w-prose text-ink-soft">
+        <h2 className="text-2xl font-semibold tracking-tight text-slate-950">Hierarchy</h2>
+        <p className="mt-1 max-w-prose text-[13px] text-slate-500">
           Users visible inside your authorization scope. Parent and organization come
           from the session — never from the browser.
         </p>
@@ -111,7 +112,7 @@ export function UsersPage() {
 
       <section className="surface overflow-hidden rounded-xl">
         <div className="overflow-x-auto">
-          <table className="min-w-full text-left text-sm">
+          <StackTable className="min-w-full text-left text-sm">
             <thead className="border-b border-line bg-paper text-sm text-ink-soft">
               <tr>
                 <th className="px-4 py-3 font-semibold">Username</th>
@@ -159,7 +160,7 @@ export function UsersPage() {
                 </tr>
               ) : null}
             </tbody>
-          </table>
+          </StackTable>
         </div>
       </section>
     </div>

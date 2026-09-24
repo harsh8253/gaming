@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { AlertTriangle, ShieldAlert, Target, TrendingUp } from 'lucide-react';
-import { ClientAvatar, MetricCard } from '../components/deskUi';
+import { ClientAvatar, MetricCard, StackTable } from '../components/deskUi';
 import { formatINR, MOCK_CLIENTS, MOCK_MATCHES, SPORTS } from '../lib/mockDesk';
 
 export function ExposurePage() {
@@ -30,7 +30,7 @@ export function ExposurePage() {
   return (
     <>
       <div className="mb-6">
-        <div className="mb-2 flex items-center gap-2">
+        <div className="mb-2 hidden items-center gap-2 sm:flex">
           <span className="rounded-md bg-blue-50 px-2 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-blue-700">
             Super Admin A
           </span>
@@ -54,14 +54,14 @@ export function ExposurePage() {
         <MetricCard label="Limit headroom" value={formatINR(totalLimit - totalExposure)} icon={Target} accent="green" sub="Remaining across hierarchy" />
       </section>
 
-      <div className="mt-6 grid gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(320px,0.85fr)]">
+      <div className="mt-6 grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(320px,0.85fr)]">
         <section className="rounded-xl border border-slate-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.02)]">
           <div className="border-b border-slate-100 px-5 py-4">
             <h3 className="text-[14px] font-semibold text-slate-950">Top exposed clients</h3>
             <p className="mt-0.5 text-[11px] text-slate-400">Sorted by current exposure</p>
           </div>
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[560px] text-left">
+            <StackTable className="w-full min-w-[560px] text-left">
               <thead>
                 <tr className="border-b border-slate-100 text-[10px] font-bold uppercase tracking-[0.08em] text-slate-400">
                   <th className="px-5 py-3 font-semibold">Client</th>
@@ -102,7 +102,7 @@ export function ExposurePage() {
                   );
                 })}
               </tbody>
-            </table>
+            </StackTable>
           </div>
         </section>
 
@@ -136,7 +136,7 @@ export function ExposurePage() {
           <p className="mt-0.5 text-[11px] text-slate-400">Fixtures currently carrying liability</p>
         </div>
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[600px] text-left">
+          <StackTable className="w-full min-w-[600px] text-left">
             <thead>
               <tr className="border-b border-slate-100 text-[10px] font-bold uppercase tracking-[0.08em] text-slate-400">
                 <th className="px-5 py-3 font-semibold">Match</th>
@@ -161,7 +161,7 @@ export function ExposurePage() {
                 </tr>
               ))}
             </tbody>
-          </table>
+          </StackTable>
         </div>
       </section>
     </>

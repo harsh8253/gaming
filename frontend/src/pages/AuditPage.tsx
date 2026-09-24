@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { CalendarClock, Globe, ShieldCheck, User, Users, X } from 'lucide-react';
-import { StatusBadge, MetricCard } from '../components/deskUi';
+import { StatusBadge, MetricCard, StackTable } from '../components/deskUi';
 import { auditCategoryTone, MOCK_AUDIT_LOG, type AuditCategory } from '../lib/mockDesk';
 
 type ScopeFilter = 'ALL' | AuditCategory;
@@ -48,7 +48,7 @@ export function AuditPage() {
   return (
     <>
       <div className="mb-6">
-        <div className="mb-2 flex items-center gap-2">
+        <div className="mb-2 hidden items-center gap-2 sm:flex">
           <span className="rounded-md bg-blue-50 px-2 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-blue-700">
             Super Admin A
           </span>
@@ -69,7 +69,7 @@ export function AuditPage() {
       <section className="mt-6 rounded-xl border border-slate-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.02)]">
         <div className="flex flex-wrap items-center gap-3 border-b border-slate-100 px-5 py-4">
           <div className="relative min-w-[200px] flex-1">
-            <User size={15} className="absolute left-3 top-2.5 text-slate-400" />
+            <User size={15} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
@@ -107,7 +107,7 @@ export function AuditPage() {
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[720px] text-left">
+            <StackTable className="w-full min-w-[720px] text-left">
               <thead>
                 <tr className="border-b border-slate-100 text-[10px] font-bold uppercase tracking-[0.08em] text-slate-400">
                   <th className="px-5 py-3 font-semibold">Actor</th>
@@ -137,19 +137,19 @@ export function AuditPage() {
                   </tr>
                 ))}
               </tbody>
-            </table>
+            </StackTable>
           </div>
         )}
       </section>
 
       {selected && (
-        <div className="fixed inset-0 z-40 flex items-center justify-center px-4" role="presentation">
+        <div className="fixed inset-0 z-40 flex items-end justify-center sm:items-center sm:px-4" role="presentation">
           <button
             aria-label="Close event details"
             onClick={() => setSelectedId(null)}
             className="absolute inset-0 bg-slate-950/30 backdrop-blur-[1px]"
           />
-          <div role="dialog" aria-modal="true" aria-label="Audit event" className="relative w-full max-w-sm rounded-xl bg-white p-6 shadow-2xl">
+          <div role="dialog" aria-modal="true" aria-label="Audit event" className="relative max-h-[92dvh] w-full overflow-y-auto rounded-t-2xl bg-white p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] shadow-2xl sm:max-w-sm sm:rounded-xl sm:p-6">
             <div className="mb-4 flex items-start justify-between">
               <div>
                 <p className="text-[15px] font-semibold text-slate-950">{selected.action}</p>

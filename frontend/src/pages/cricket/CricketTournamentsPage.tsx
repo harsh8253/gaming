@@ -14,7 +14,7 @@ import {
   SkeletonRows,
   inputClass,
 } from '../../components/cricketUi';
-import { StatusBadge } from '../../components/deskUi';
+import { StackTable, StatusBadge } from '../../components/deskUi';
 import { formatDateRange, formatLabel, humanize, localDateKey } from '../../lib/cricket';
 import type { Tournament } from '../../types/cricket';
 
@@ -114,7 +114,7 @@ export function CricketTournamentsPage() {
             ]}
           />
           <div className="relative min-w-[200px] flex-1">
-            <Search size={15} className="absolute left-3 top-2.5 text-slate-400" />
+            <Search size={15} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
             <input
               value={query}
               onChange={(e) => resetLimit(setQuery)(e.target.value)}
@@ -156,7 +156,7 @@ export function CricketTournamentsPage() {
         ) : (
           <>
             <div className="overflow-x-auto">
-              <table className="w-full min-w-[760px] text-left">
+              <StackTable className="w-full min-w-[760px] text-left">
                 <thead>
                   <tr className="border-b border-slate-100 text-[10px] font-bold uppercase tracking-[0.08em] text-slate-400">
                     <th className="px-5 py-3 font-semibold">Tournament</th>
@@ -197,7 +197,7 @@ export function CricketTournamentsPage() {
                     );
                   })}
                 </tbody>
-              </table>
+              </StackTable>
             </div>
             <div className="flex items-center justify-between border-t border-slate-100 px-5 py-3 text-[11px] text-slate-500">
               <span className="tabular-nums">

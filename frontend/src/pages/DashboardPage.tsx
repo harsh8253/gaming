@@ -17,7 +17,7 @@ import {
   Users,
   WalletCards,
 } from 'lucide-react';
-import { ClientAvatar, MetricCard, StatusBadge } from '../components/deskUi';
+import { ClientAvatar, MetricCard, StackTable, StatusBadge } from '../components/deskUi';
 import type { ShellContext } from '../components/WagerDeskShell';
 import { betStatusTone, formatINR, MOCK_BETS, MOCK_CLIENTS } from '../lib/mockDesk';
 
@@ -58,7 +58,7 @@ export function DashboardPage() {
     <>
       <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <div className="mb-2 flex items-center gap-2">
+          <div className="mb-2 hidden items-center gap-2 sm:flex">
             <span className="rounded-md bg-blue-50 px-2 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-blue-700">
               Super Admin A
             </span>
@@ -106,7 +106,7 @@ export function DashboardPage() {
         <MetricCard label="Commission" value="₹ 82,450" change="+8.4%" icon={BriefcaseBusiness} accent="blue" sub="This month" />
       </section>
 
-      <div className="mt-6 grid gap-6 xl:grid-cols-[minmax(0,1.55fr)_minmax(320px,0.8fr)]">
+      <div className="mt-6 grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1.55fr)_minmax(320px,0.8fr)]">
         <section className="rounded-xl border border-slate-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.02)]">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 px-5 py-4">
             <div>
@@ -131,7 +131,7 @@ export function DashboardPage() {
             </div>
           </div>
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[760px] text-left">
+            <StackTable className="w-full min-w-[760px] text-left">
               <thead>
                 <tr className="border-b border-slate-100 text-[10px] font-bold uppercase tracking-[0.08em] text-slate-400">
                   <th className="px-5 py-3 font-semibold">Client</th>
@@ -180,7 +180,7 @@ export function DashboardPage() {
                   </tr>
                 ))}
               </tbody>
-            </table>
+            </StackTable>
           </div>
           <div className="flex items-center justify-between border-t border-slate-100 px-5 py-3">
             <span className="text-[11px] text-slate-400">
@@ -231,7 +231,7 @@ export function DashboardPage() {
         </section>
       </div>
 
-      <div className="mt-6 grid gap-6 xl:grid-cols-[minmax(0,1.55fr)_minmax(320px,0.8fr)]">
+      <div className="mt-6 grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1.55fr)_minmax(320px,0.8fr)]">
         <section className="rounded-xl border border-slate-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.02)]">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 px-5 py-4">
             <div>
@@ -243,7 +243,7 @@ export function DashboardPage() {
             </button>
           </div>
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[700px] text-left">
+            <StackTable className="w-full min-w-[700px] text-left">
               <thead>
                 <tr className="border-b border-slate-100 text-[10px] font-bold uppercase tracking-[0.08em] text-slate-400">
                   <th className="px-5 py-3 font-semibold">Bet ID / Client</th>
@@ -282,7 +282,7 @@ export function DashboardPage() {
                   </tr>
                 ))}
               </tbody>
-            </table>
+            </StackTable>
           </div>
         </section>
 

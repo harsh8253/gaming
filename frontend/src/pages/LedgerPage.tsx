@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useMemo, useState, type FormEvent } from 'react';
 import { api, ApiError } from '../api/client';
+import { StackTable } from '../components/deskUi';
 import {
   canPostLedger,
   formatAmount,
@@ -123,16 +124,16 @@ export function LedgerPage() {
   }
 
   return (
-    <div className="mx-auto max-w-6xl space-y-8">
+    <div className="space-y-6">
       <header>
-        <h1 className="font-display text-3xl font-bold tracking-tight">Ledger</h1>
-        <p className="mt-2 max-w-prose text-ink-soft">
+        <h2 className="text-2xl font-semibold tracking-tight text-slate-950">Ledger</h2>
+        <p className="mt-1 max-w-prose text-[13px] text-slate-500">
           Double-entry journals are append-only. Balances are derived as credits minus
           debits. Corrections use reversals.
         </p>
       </header>
 
-      <section className="grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
+      <section className="grid grid-cols-1 gap-4 lg:grid-cols-[1.1fr_0.9fr]">
         <article className="surface rounded-xl p-6">
           <h2 className="font-display text-lg font-semibold">Account balance</h2>
           <div className="mt-4">
@@ -310,7 +311,7 @@ export function LedgerPage() {
           </select>
         </div>
         <div className="overflow-x-auto">
-          <table className="min-w-full text-left text-sm">
+          <StackTable className="min-w-full text-left text-sm">
             <thead className="border-b border-line bg-paper text-sm text-ink-soft">
               <tr>
                 <th className="px-4 py-3 font-semibold">When</th>
@@ -370,7 +371,7 @@ export function LedgerPage() {
                 </tr>
               ) : null}
             </tbody>
-          </table>
+          </StackTable>
         </div>
       </section>
     </div>

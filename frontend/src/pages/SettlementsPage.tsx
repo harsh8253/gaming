@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useOutletContext, useSearchParams } from 'react-router-dom';
 import { CalendarClock, CheckCircle2, ClipboardCheck, Search, User, Wallet, X, XCircle } from 'lucide-react';
-import { MetricCard, StatusBadge } from '../components/deskUi';
+import { MetricCard, StackTable, StatusBadge } from '../components/deskUi';
 import type { ShellContext } from '../components/WagerDeskShell';
 import {
   formatINR,
@@ -78,7 +78,7 @@ export function SettlementsPage() {
   return (
     <>
       <div className="mb-6">
-        <div className="mb-2 flex items-center gap-2">
+        <div className="mb-2 hidden items-center gap-2 sm:flex">
           <span className="rounded-md bg-blue-50 px-2 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-blue-700">
             Super Admin A
           </span>
@@ -99,7 +99,7 @@ export function SettlementsPage() {
       <section className="mt-6 rounded-xl border border-slate-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.02)]">
         <div className="flex flex-wrap items-center gap-3 border-b border-slate-100 px-5 py-4">
           <div className="relative min-w-[200px] flex-1">
-            <Search size={15} className="absolute left-3 top-2.5 text-slate-400" />
+            <Search size={15} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
@@ -136,7 +136,7 @@ export function SettlementsPage() {
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[760px] text-left">
+            <StackTable className="w-full min-w-[760px] text-left">
               <thead>
                 <tr className="border-b border-slate-100 text-[10px] font-bold uppercase tracking-[0.08em] text-slate-400">
                   <th className="px-5 py-3 font-semibold">Settlement / Match</th>
@@ -170,7 +170,7 @@ export function SettlementsPage() {
                   </tr>
                 ))}
               </tbody>
-            </table>
+            </StackTable>
           </div>
         )}
       </section>
@@ -186,7 +186,7 @@ export function SettlementsPage() {
             role="dialog"
             aria-modal="true"
             aria-label={`${selected.id} details`}
-            className="absolute inset-y-0 right-0 flex w-full max-w-md flex-col bg-white shadow-2xl"
+            className="absolute inset-x-0 bottom-0 flex max-h-[92dvh] flex-col rounded-t-2xl bg-white pb-[env(safe-area-inset-bottom)] shadow-2xl sm:inset-y-0 sm:left-auto sm:max-h-none sm:w-full sm:max-w-md sm:rounded-none sm:pb-0"
           >
             <div className="flex items-start justify-between gap-3 border-b border-slate-100 px-6 py-5">
               <div>

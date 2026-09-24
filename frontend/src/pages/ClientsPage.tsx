@@ -12,7 +12,7 @@ import {
   WalletCards,
   X,
 } from 'lucide-react';
-import { ClientAvatar, MetricCard, StatusBadge } from '../components/deskUi';
+import { ClientAvatar, MetricCard, StackTable, StatusBadge } from '../components/deskUi';
 import type { ShellContext } from '../components/WagerDeskShell';
 import {
   betStatusTone,
@@ -140,7 +140,7 @@ export function ClientsPage() {
     <>
       <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <div className="mb-2 flex items-center gap-2">
+          <div className="mb-2 hidden items-center gap-2 sm:flex">
             <span className="rounded-md bg-blue-50 px-2 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-blue-700">
               Super Admin A
             </span>
@@ -170,7 +170,7 @@ export function ClientsPage() {
       <section className="mt-6 rounded-xl border border-slate-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.02)]">
         <div className="flex flex-wrap items-center gap-3 border-b border-slate-100 px-5 py-4">
           <div className="relative flex-1 min-w-[200px]">
-            <Search size={15} className="absolute left-3 top-2.5 text-slate-400" />
+            <Search size={15} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
@@ -226,7 +226,7 @@ export function ClientsPage() {
         ) : (
           <>
             <div className="overflow-x-auto">
-              <table className="w-full min-w-[860px] text-left">
+              <StackTable className="w-full min-w-[860px] text-left">
                 <thead>
                   <tr className="border-b border-slate-100 text-[10px] font-bold uppercase tracking-[0.08em] text-slate-400">
                     <th className="px-5 py-3 font-semibold">Client</th>
@@ -277,7 +277,7 @@ export function ClientsPage() {
                     </tr>
                   ))}
                 </tbody>
-              </table>
+              </StackTable>
             </div>
             <div className="border-t border-slate-100 px-5 py-3">
               <span className="text-[11px] text-slate-400">
@@ -299,7 +299,7 @@ export function ClientsPage() {
             role="dialog"
             aria-modal="true"
             aria-label={`${selected.name} details`}
-            className="absolute inset-y-0 right-0 flex w-full max-w-md flex-col bg-white shadow-2xl"
+            className="absolute inset-x-0 bottom-0 flex max-h-[92dvh] flex-col rounded-t-2xl bg-white pb-[env(safe-area-inset-bottom)] shadow-2xl sm:inset-y-0 sm:left-auto sm:max-h-none sm:w-full sm:max-w-md sm:rounded-none sm:pb-0"
           >
             <div className="flex items-start justify-between gap-3 border-b border-slate-100 px-6 py-5">
               <div className="flex items-center gap-3">
@@ -405,7 +405,7 @@ export function ClientsPage() {
       )}
 
       {addOpen && (
-        <div className="fixed inset-0 z-40 flex items-center justify-center px-4" role="presentation">
+        <div className="fixed inset-0 z-40 flex items-end justify-center sm:items-center sm:px-4" role="presentation">
           <button
             aria-label="Close add client form"
             onClick={() => setAddOpen(false)}
@@ -415,7 +415,7 @@ export function ClientsPage() {
             role="dialog"
             aria-modal="true"
             aria-label="Add client"
-            className="relative w-full max-w-sm rounded-xl bg-white p-6 shadow-2xl"
+            className="relative max-h-[92dvh] w-full overflow-y-auto rounded-t-2xl bg-white p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] shadow-2xl sm:max-w-sm sm:rounded-xl sm:p-6"
           >
             <div className="mb-4 flex items-center justify-between">
               <h3 className="text-[15px] font-semibold text-slate-950">Add client</h3>

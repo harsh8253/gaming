@@ -89,7 +89,7 @@ export function SettingsPage() {
   return (
     <>
       <div className="mb-6">
-        <div className="mb-2 flex items-center gap-2">
+        <div className="mb-2 hidden items-center gap-2 sm:flex">
           <span className="rounded-md bg-blue-50 px-2 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-blue-700">
             Super Admin A
           </span>
