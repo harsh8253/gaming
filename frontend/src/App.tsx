@@ -9,6 +9,12 @@ import { BetsPage } from './pages/BetsPage';
 import { CashPage } from './pages/CashPage';
 import { ClientsPage } from './pages/ClientsPage';
 import { CommissionsPage } from './pages/CommissionsPage';
+import { CricketLivePage } from './pages/cricket/CricketLivePage';
+import { CricketMatchPage } from './pages/cricket/CricketMatchPage';
+import { CricketPlayerPage } from './pages/cricket/CricketPlayerPage';
+import { CricketTeamPage } from './pages/cricket/CricketTeamPage';
+import { CricketTournamentPage } from './pages/cricket/CricketTournamentPage';
+import { CricketTournamentsPage } from './pages/cricket/CricketTournamentsPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { ExposurePage } from './pages/ExposurePage';
 import { LedgerPage } from './pages/LedgerPage';
@@ -43,6 +49,14 @@ export default function App() {
                 <Route path="clients" element={<ClientsPage />} />
                 <Route path="bets" element={<BetsPage />} />
                 <Route path="matches" element={<MatchesPage />} />
+                <Route path="cricket">
+                  <Route index element={<CricketLivePage />} />
+                  <Route path="tournaments" element={<CricketTournamentsPage />} />
+                  <Route path="tournaments/:id" element={<CricketTournamentPage />} />
+                  <Route path="matches/:id" element={<CricketMatchPage />} />
+                  <Route path="teams/:id" element={<CricketTeamPage />} />
+                  <Route path="players/:id" element={<CricketPlayerPage />} />
+                </Route>
                 <Route path="markets" element={<MarketsPage />} />
                 <Route path="exposure" element={<ExposurePage />} />
                 <Route path="settlements" element={<SettlementsPage />} />

@@ -14,6 +14,7 @@ import {
   FileBarChart,
   LayoutDashboard,
   Menu,
+  Radio,
   Search,
   Settings,
   ShieldCheck,
@@ -55,6 +56,7 @@ const navGroups: { label: string; items: NavItem[] }[] = [
     label: 'Operations',
     items: [
       { label: 'Matches', icon: Activity, to: '/matches' },
+      { label: 'Cricket', icon: Radio, to: '/cricket' },
       { label: 'Markets', icon: SlidersHorizontal, badge: String(openMarketCount), to: '/markets' },
       { label: 'Exposure', icon: BarChart3, to: '/exposure' },
       { label: 'Settlements', icon: ArrowDownLeft, badge: String(pendingSettlementCount), to: '/settlements' },
@@ -84,6 +86,7 @@ const HEADER_TITLES: Record<string, { crumb: string; heading: string }> = {
   '/clients': { crumb: 'Clients', heading: 'Clients' },
   '/bets': { crumb: 'Bets', heading: 'Bets' },
   '/matches': { crumb: 'Matches', heading: 'Matches' },
+  '/cricket': { crumb: 'Cricket', heading: 'Cricket data' },
   '/markets': { crumb: 'Markets', heading: 'Markets' },
   '/exposure': { crumb: 'Exposure', heading: 'Exposure' },
   '/settlements': { crumb: 'Settlements', heading: 'Settlements' },
@@ -110,7 +113,11 @@ export function WagerDeskShell() {
     `${client.name} ${client.id}`.toLowerCase().includes(search.toLowerCase()),
   ).slice(0, 6);
 
-  const headerInfo = HEADER_TITLES[location.pathname] ?? { crumb: 'WagerDesk', heading: 'WagerDesk' };
+  const headerInfo =
+    HEADER_TITLES[location.pathname] ??
+    (location.pathname.startsWith('/cricket/')
+      ? HEADER_TITLES['/cricket']
+      : { crumb: 'WagerDesk', heading: 'WagerDesk' });
 
   function isActive(item: NavItem) {
     if (!item.to) return false;

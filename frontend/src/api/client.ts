@@ -8,6 +8,25 @@ import type {
   PublicUser,
   Role,
 } from '../types/api';
+import type {
+  LeadersResponse,
+  LineupsResponse,
+  MatchSummaryResponse,
+  MatchTimelineResponse,
+  PlayerProfileResponse,
+  ResultsResponse,
+  ScheduleResponse,
+  SeasonsResponse,
+  SquadResponse,
+  StandingsResponse,
+  TeamProfileResponse,
+  TeamResultsResponse,
+  TeamScheduleResponse,
+  TournamentInfoResponse,
+  TournamentsResponse,
+  ToursResponse,
+  VersusResponse,
+} from '../types/cricket';
 
 const TOKEN_KEY = 'wagerdesk.token';
 
@@ -120,4 +139,31 @@ export const api = {
       headers: { 'Idempotency-Key': idempotencyKey },
     });
   },
+};
+
+const enc = encodeURIComponent;
+
+export const cricketApi = {
+  live: () => request<ScheduleResponse>('/cricket/live'),
+  dailySchedule: (date: string) => request<ScheduleResponse>(`/cricket/daily/${date}/schedule`),
+  dailyResults: (date: string) => request<ResultsResponse>(`/cricket/daily/${date}/results`),
+  tournaments: () => request<TournamentsResponse>('/cricket/tournaments'),
+  tours: () => request<ToursResponse>('/cricket/tours'),
+  tournamentInfo: (id: string) => request<TournamentInfoResponse>(`/cricket/tournaments/${enc(id)}/info`),
+  tournamentSeasons: (id: string) => request<SeasonsResponse>(`/cricket/tournaments/${enc(id)}/seasons`),
+  tournamentSchedule: (id: string) => request<ScheduleResponse>(`/cricket/tournaments/${enc(id)}/schedule`),
+  tournamentResults: (id: string) => request<ResultsResponse>(`/cricket/tournaments/${enc(id)}/results`),
+  tournamentStandings: (id: string) => request<StandingsResponse>(`/cricket/tournaments/${enc(id)}/standings`),
+  tournamentLeaders: (id: string) => request<LeadersResponse>(`/cricket/tournaments/${enc(id)}/leaders`),
+  tournamentSquad: (id: string, teamId: string) =>
+    request<SquadResponse>(`/cricket/tournaments/${enc(id)}/teams/${enc(teamId)}/squads`),
+  matchSummary: (id: string) => request<MatchSummaryResponse>(`/cricket/matches/${enc(id)}/summary`),
+  matchLineups: (id: string) => request<LineupsResponse>(`/cricket/matches/${enc(id)}/lineups`),
+  matchTimeline: (id: string) => request<MatchTimelineResponse>(`/cricket/matches/${enc(id)}/timeline`),
+  teamProfile: (id: string) => request<TeamProfileResponse>(`/cricket/teams/${enc(id)}/profile`),
+  teamSchedule: (id: string) => request<TeamScheduleResponse>(`/cricket/teams/${enc(id)}/schedule`),
+  teamResults: (id: string) => request<TeamResultsResponse>(`/cricket/teams/${enc(id)}/results`),
+  teamVersus: (id: string, otherId: string) =>
+    request<VersusResponse>(`/cricket/teams/${enc(id)}/versus/${enc(otherId)}`),
+  playerProfile: (id: string) => request<PlayerProfileResponse>(`/cricket/players/${enc(id)}/profile`),
 };
