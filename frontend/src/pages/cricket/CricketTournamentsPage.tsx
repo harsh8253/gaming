@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { ChevronRight, Search } from 'lucide-react';
 import { cricketApi } from '../../api/client';
@@ -14,7 +14,7 @@ import {
   SkeletonRows,
   inputClass,
 } from '../../components/cricketUi';
-import { StackTable, StatusBadge } from '../../components/deskUi';
+import { ListRow, MobileList, StackTable, StatusBadge } from '../../components/deskUi';
 import { formatDateRange, formatLabel, humanize, localDateKey } from '../../lib/cricket';
 import type { Tournament } from '../../types/cricket';
 
@@ -31,6 +31,7 @@ function phaseOf(tournament: Tournament, today: string): Exclude<Phase, 'all'> {
 }
 
 export function CricketTournamentsPage() {
+  const navigate = useNavigate();
   const tournaments = useQuery({ queryKey: ['cricket', 'tournaments'], queryFn: cricketApi.tournaments, staleTime: 30 * 60_000 });
   const tours = useQuery({ queryKey: ['cricket', 'tours'], queryFn: cricketApi.tours, staleTime: 30 * 60_000 });
   const [query, setQuery] = useState('');
@@ -101,7 +102,7 @@ export function CricketTournamentsPage() {
       <CricketSubnav />
 
       <Panel>
-        <div className="flex flex-wrap items-center gap-3 border-b border-slate-100 px-5 py-4">
+        <div className="flex flex-wrap items-center gap-3 border-b border-border px-5 py-3.5">
           <Segmented
             label="Season phase"
             value={phase}
@@ -114,7 +115,7 @@ export function CricketTournamentsPage() {
             ]}
           />
           <div className="relative min-w-[200px] flex-1">
-            <Search size={15} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+            <Search size={15} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
             <input
               value={query}
               onChange={(e) => resetLimit(setQuery)(e.target.value)}
@@ -155,10 +156,35 @@ export function CricketTournamentsPage() {
           />
         ) : (
           <>
-            <div className="overflow-x-auto">
+            <MobileList label="Tournaments">
+                {filtered.slice(0, limit).map((t) => {
+                  const current = phaseOf(t, today);
+                  return (
+                    <ListRow
+                      key={t.id}
+                      onClick={() => navigate(`/cricket/tournaments/${t.id}`)}
+                      title={t.name}
+                      subtitle={[formatLabel(t.type), t.category?.name, t.gender && t.gender !== 'men' ? humanize(t.gender) : null]
+                        .filter(Boolean)
+                        .join(' · ')}
+                      meta={<span className="tabular-nums">{formatDateRange(t.current_season?.start_date, t.current_season?.end_date)}</span>}
+                      trailingSub={
+                        current === 'running' ? (
+                          <StatusBadge tone="amber">IN PROGRESS</StatusBadge>
+                        ) : current === 'upcoming' ? (
+                          <StatusBadge tone="blue">UPCOMING</StatusBadge>
+                        ) : (
+                          <span className="text-[12px] text-slate-500">{t.current_season?.year ?? '—'}</span>
+                        )
+                      }
+                    />
+                  );
+                })}
+              </MobileList>
+            <div className="hidden overflow-x-auto md:block">
               <StackTable className="w-full min-w-[760px] text-left">
                 <thead>
-                  <tr className="border-b border-slate-100 text-[10px] font-bold uppercase tracking-[0.08em] text-slate-400">
+                  <tr className="border-b border-slate-100 text-[10px] font-bold uppercase tracking-[0.08em] text-muted-foreground">
                     <th className="px-5 py-3 font-semibold">Tournament</th>
                     <th className="px-3 py-3 font-semibold">Format</th>
                     <th className="px-3 py-3 font-semibold">Category</th>

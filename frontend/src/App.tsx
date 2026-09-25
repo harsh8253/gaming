@@ -1,6 +1,9 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { Toaster } from '@/components/ui/sonner';
+import { useIsPhone } from './components/DeskSheet';
+import { PwaUpdater } from './components/InstallApp';
 import { RequireAuth } from './components/RequireAuth';
 import { WagerDeskShell } from './components/WagerDeskShell';
 import { AuditPage } from './pages/AuditPage';
@@ -34,6 +37,11 @@ const queryClient = new QueryClient({
     },
   },
 });
+
+function AppToaster() {
+  const isPhone = useIsPhone();
+  return <Toaster position={isPhone ? 'top-center' : 'bottom-right'} />;
+}
 
 export default function App() {
   return (
@@ -71,6 +79,8 @@ export default function App() {
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </BrowserRouter>
+        <AppToaster />
+        <PwaUpdater />
       </QueryClientProvider>
     </Provider>
   );

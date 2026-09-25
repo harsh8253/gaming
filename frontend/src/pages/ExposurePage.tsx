@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { AlertTriangle, ShieldAlert, Target, TrendingUp } from 'lucide-react';
 import { Matchup } from '../components/cricketUi';
-import { ClientAvatar, MetricCard, StackTable } from '../components/deskUi';
+import { ClientAvatar, ListRow, MetricCard, MetricStrip, MobileList, PageHeader, StackTable } from '../components/deskUi';
 import { formatINR, MOCK_CLIENTS, MOCK_MATCHES, FORMATS } from '../lib/mockDesk';
 
 export function ExposurePage() {
@@ -30,19 +30,9 @@ export function ExposurePage() {
 
   return (
     <>
-      <div className="mb-6">
-        <div className="mb-2 hidden items-center gap-2 sm:flex">
-          <span className="rounded-md bg-blue-50 px-2 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-blue-700">
-            Super Admin A
-          </span>
-          <span className="text-[11px] text-slate-400">/</span>
-          <span className="text-[11px] font-medium text-slate-500">Master network</span>
-        </div>
-        <h2 className="text-2xl font-semibold tracking-tight text-slate-950">Exposure</h2>
-        <p className="mt-1 text-[13px] text-slate-500">Live liability across clients, formats, and matches.</p>
-      </div>
+      <PageHeader title="Exposure" description="Live liability across clients, formats, and matches." />
 
-      <section className="grid grid-cols-2 gap-3 md:grid-cols-4">
+      <MetricStrip>
         <MetricCard label="Total exposure" value={formatINR(totalExposure)} icon={ShieldAlert} accent="amber" sub="Across all clients" />
         <MetricCard
           label="Highest client"
@@ -53,18 +43,46 @@ export function ExposurePage() {
         />
         <MetricCard label="Over 80% of limit" value={String(overThreshold.length)} icon={AlertTriangle} accent="red" sub="Clients to review" />
         <MetricCard label="Limit headroom" value={formatINR(totalLimit - totalExposure)} icon={Target} accent="green" sub="Remaining across hierarchy" />
-      </section>
+      </MetricStrip>
 
       <div className="mt-6 grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(320px,0.85fr)]">
-        <section className="rounded-xl border border-slate-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.02)]">
-          <div className="border-b border-slate-100 px-5 py-4">
-            <h3 className="text-[14px] font-semibold text-slate-950">Top exposed clients</h3>
-            <p className="mt-0.5 text-[11px] text-slate-400">Sorted by current exposure</p>
+        <section className="rounded-lg border border-border bg-card">
+          <div className="border-b border-border px-5 py-3.5">
+            <h3 className="text-[14px] font-semibold text-foreground">Top exposed clients</h3>
+            <p className="mt-0.5 text-[11px] text-muted-foreground">Sorted by current exposure</p>
           </div>
-          <div className="overflow-x-auto">
+          <MobileList label="Top exposed clients">
+            {topClients.map((client) => {
+              const pct = Math.round((client.exposure / client.limit) * 100);
+              return (
+                <ListRow
+                  key={client.id}
+                  onClick={() => navigate(`/clients?focus=${client.id}`)}
+                  leading={<ClientAvatar initials={client.initials} tone={client.tone} size={9} />}
+                  title={client.name}
+                  subtitle={`Limit ${formatINR(client.limit)}`}
+                  meta={
+                    <span className="h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
+                      <span
+                        className={`block h-full rounded-full ${pct >= 80 ? 'bg-red-500' : 'bg-blue-600'}`}
+                        style={{ width: `${Math.min(pct, 100)}%` }}
+                      />
+                    </span>
+                  }
+                  trailing={<span className="text-amber-700">{formatINR(client.exposure)}</span>}
+                  trailingSub={
+                    <span className={`text-[12px] font-semibold tabular-nums ${pct >= 80 ? 'text-red-700' : 'text-slate-500'}`}>
+                      {pct}% used
+                    </span>
+                  }
+                />
+              );
+            })}
+          </MobileList>
+          <div className="hidden overflow-x-auto md:block">
             <StackTable className="w-full min-w-[560px] text-left">
               <thead>
-                <tr className="border-b border-slate-100 text-[10px] font-bold uppercase tracking-[0.08em] text-slate-400">
+                <tr className="border-b border-slate-100 text-[10px] font-bold uppercase tracking-[0.08em] text-muted-foreground">
                   <th className="px-5 py-3 font-semibold">Client</th>
                   <th className="px-3 py-3 text-right font-semibold">Exposure</th>
                   <th className="px-3 py-3 text-right font-semibold">Limit</th>
@@ -107,10 +125,10 @@ export function ExposurePage() {
           </div>
         </section>
 
-        <section className="rounded-xl border border-slate-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.02)]">
-          <div className="border-b border-slate-100 px-5 py-4">
-            <h3 className="text-[14px] font-semibold text-slate-950">Exposure by format</h3>
-            <p className="mt-0.5 text-[11px] text-slate-400">Live and upcoming fixtures</p>
+        <section className="rounded-lg border border-border bg-card">
+          <div className="border-b border-border px-5 py-3.5">
+            <h3 className="text-[14px] font-semibold text-foreground">Exposure by format</h3>
+            <p className="mt-0.5 text-[11px] text-muted-foreground">Live and upcoming fixtures</p>
           </div>
           <div className="space-y-4 p-5">
             {byFormat.map((row) => (
@@ -131,15 +149,26 @@ export function ExposurePage() {
         </section>
       </div>
 
-      <section className="mt-6 rounded-xl border border-slate-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.02)]">
-        <div className="border-b border-slate-100 px-5 py-4">
-          <h3 className="text-[14px] font-semibold text-slate-950">Exposure by match</h3>
-          <p className="mt-0.5 text-[11px] text-slate-400">Fixtures currently carrying liability</p>
+      <section className="mt-6 rounded-lg border border-border bg-card">
+        <div className="border-b border-border px-5 py-3.5">
+          <h3 className="text-[14px] font-semibold text-foreground">Exposure by match</h3>
+          <p className="mt-0.5 text-[11px] text-muted-foreground">Fixtures currently carrying liability</p>
         </div>
-        <div className="overflow-x-auto">
+        <MobileList label="Exposure by match">
+          {exposedMatches.map((match) => (
+            <ListRow
+              key={match.id}
+              onClick={() => navigate(`/matches?focus=${match.id}`)}
+              title={<Matchup home={match.home} away={match.away} layout="inline" />}
+              subtitle={`${match.competition} · ${match.format}`}
+              trailing={<span className="text-amber-700">{formatINR(match.exposure)}</span>}
+            />
+          ))}
+        </MobileList>
+        <div className="hidden overflow-x-auto md:block">
           <StackTable className="w-full min-w-[600px] text-left">
             <thead>
-              <tr className="border-b border-slate-100 text-[10px] font-bold uppercase tracking-[0.08em] text-slate-400">
+              <tr className="border-b border-slate-100 text-[10px] font-bold uppercase tracking-[0.08em] text-muted-foreground">
                 <th className="px-5 py-3 font-semibold">Match</th>
                 <th className="px-3 py-3 font-semibold">Format</th>
                 <th className="px-5 py-3 text-right font-semibold">Exposure</th>

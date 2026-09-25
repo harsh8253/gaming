@@ -24,14 +24,14 @@ export function CricketSubnav() {
     { to: '/cricket/tournaments', label: 'Tournaments', end: false },
   ];
   return (
-    <nav aria-label="Cricket sections" className="mb-6 flex items-center gap-1 border-b border-slate-200">
+    <nav aria-label="Cricket sections" className="mb-4 flex items-center gap-1 border-b border-slate-200 sm:mb-6">
       {links.map((link) => (
         <NavLink
           key={link.to}
           to={link.to}
           end={link.end}
           className={({ isActive }) =>
-            `-mb-px border-b-2 px-3 py-2.5 text-[12px] font-semibold transition-colors ${isActive ? 'border-blue-600 text-blue-700' : 'border-transparent text-slate-500 hover:text-slate-800'}`
+            `-mb-px flex-1 border-b-2 px-3 py-3 text-center text-[12px] font-semibold transition-colors sm:flex-none sm:py-2.5 ${isActive ? 'border-blue-600 text-blue-700' : 'border-transparent text-slate-500 hover:text-slate-800'}`
           }
         >
           {link.label}
@@ -53,7 +53,7 @@ export function PageHeading({
   actions?: ReactNode;
 }) {
   return (
-    <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
+    <div className="mb-4 flex flex-wrap items-end justify-between gap-3 sm:mb-6 sm:gap-4">
       <div className="min-w-0">
         {trail && trail.length > 0 && (
           <ol className="mb-2 flex flex-wrap items-center gap-1 text-[11px] text-slate-500">
@@ -71,8 +71,8 @@ export function PageHeading({
             ))}
           </ol>
         )}
-        <h2 className="text-2xl font-semibold tracking-tight text-balance text-slate-950">{title}</h2>
-        {description && <p className="mt-1 text-[13px] text-slate-500">{description}</p>}
+        <h2 className="text-[26px] font-semibold leading-tight tracking-tight text-balance text-slate-950 sm:text-2xl">{title}</h2>
+        {description && <p className="mt-1 hidden text-[13px] text-slate-500 sm:block">{description}</p>}
       </div>
       {actions && <div className="flex flex-wrap items-center gap-2">{actions}</div>}
     </div>
@@ -91,7 +91,7 @@ export function Panel({
   className?: string;
 }) {
   return (
-    <section className={`rounded-xl border border-slate-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.02)] ${className}`}>
+    <section className={`rounded-lg border border-border bg-card ${className}`}>
       {(title || aside) && (
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 px-5 py-3.5">
           {title && <h3 className="text-[13px] font-semibold text-slate-900">{title}</h3>}
@@ -115,18 +115,18 @@ export function Segmented<T extends string>({
   label: string;
 }) {
   return (
-    <div role="tablist" aria-label={label} className="inline-flex max-w-full flex-wrap items-center gap-1 rounded-lg border border-slate-200 bg-white p-1">
+    <div role="tablist" aria-label={label} className="seg-tabs no-scrollbar inline-flex h-9 max-w-full items-center gap-0.5 overflow-x-auto rounded-lg bg-muted p-[3px]">
       {options.map((option) => (
         <button
           key={option.value}
           role="tab"
           aria-selected={value === option.value}
           onClick={() => onChange(option.value)}
-          className={`flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-[11px] font-semibold transition-colors ${value === option.value ? 'bg-blue-50 text-blue-700' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-700'}`}
+          className={`flex shrink-0 items-center gap-1.5 rounded-md px-3 py-1 text-[12px] font-medium transition-all ${value === option.value ? 'bg-card text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
         >
           {option.label}
           {option.count !== undefined && (
-            <span className={`tabular-nums ${value === option.value ? 'text-blue-500' : 'text-slate-400'}`}>{option.count}</span>
+            <span className={`tabular-nums ${value === option.value ? 'text-blue-600' : 'text-muted-foreground/70'}`}>{option.count}</span>
           )}
         </button>
       ))}
@@ -182,7 +182,7 @@ export function TeamMark({ team, size = 'md' }: { team?: Team; size?: keyof type
   return (
     <span
       aria-hidden="true"
-      className={`flex shrink-0 items-center justify-center rounded-md font-bold tracking-[0.04em] ${MARK_SIZES[size]} ${team ? toneFor(team.id) : 'bg-slate-100 text-slate-400'}`}
+      className={`flex shrink-0 items-center justify-center rounded-md font-bold tracking-[0.04em] ${MARK_SIZES[size]} ${team ? toneFor(team.id) : 'bg-slate-100 text-muted-foreground'}`}
     >
       {teamCode(team)}
     </span>
@@ -214,7 +214,7 @@ export function Matchup({
           <TeamMark team={namedTeam(away)} size="xs" />
         </span>
         <span className="min-w-0">
-          {home} <span className="font-normal text-slate-400">vs</span> {away}
+          {home} <span className="font-normal text-muted-foreground">vs</span> {away}
         </span>
       </span>
     );
@@ -275,7 +275,7 @@ function TeamScoreLine({ item, side }: { item: EventWithStatus; side: 'home' | '
         {innings.map((inn) => (
           <span key={inn.number} className="flex items-baseline gap-1">
             <span className={`text-[12px] ${won ? 'font-semibold text-slate-950' : 'font-medium text-slate-700'}`}>{inn.score}</span>
-            {inn.overs !== undefined && <span className="text-[10px] text-slate-400">{inn.overs}</span>}
+            {inn.overs !== undefined && <span className="text-[10px] text-muted-foreground">{inn.overs}</span>}
           </span>
         ))}
       </span>
@@ -298,7 +298,7 @@ export function MatchRow({ item, showTournament = false }: { item: EventWithStat
   return (
     <Link
       to={`/cricket/matches/${event.id}`}
-      className="group grid grid-cols-1 gap-3 px-5 py-3.5 transition-colors hover:bg-slate-50/70 sm:grid-cols-[132px_minmax(0,1fr)_auto] sm:items-center sm:gap-5"
+      className="group grid grid-cols-1 gap-3 px-4 py-3.5 transition-colors hover:bg-slate-50/70 active:bg-slate-50 sm:px-5 sm:grid-cols-[132px_minmax(0,1fr)_auto] sm:items-center sm:gap-5"
     >
       <div className="flex items-center gap-2 sm:flex-col sm:items-start sm:gap-1.5">
         <MatchStatusBadge status={status} />
@@ -343,7 +343,7 @@ export function ErrorState({ error, onRetry }: { error: unknown; onRetry?: () =>
   const notFound = error instanceof ApiError && error.status === 404;
   return (
     <div role="alert" className="flex flex-col items-center gap-3 px-5 py-12 text-center">
-      <span className={`flex size-10 items-center justify-center rounded-full ${notFound ? 'bg-slate-100 text-slate-400' : 'bg-red-50 text-red-600'}`}>
+      <span className={`flex size-10 items-center justify-center rounded-full ${notFound ? 'bg-slate-100 text-muted-foreground' : 'bg-red-50 text-red-600'}`}>
         {notFound ? <SearchX size={18} /> : <AlertTriangle size={18} />}
       </span>
       <div>
@@ -362,7 +362,7 @@ export function ErrorState({ error, onRetry }: { error: unknown; onRetry?: () =>
 export function EmptyState({ title, body, action }: { title: string; body?: string; action?: ReactNode }) {
   return (
     <div className="flex flex-col items-center gap-3 px-5 py-12 text-center">
-      <span className="flex size-10 items-center justify-center rounded-full bg-slate-100 text-slate-400">
+      <span className="flex size-10 items-center justify-center rounded-full bg-slate-100 text-muted-foreground">
         <SearchX size={18} />
       </span>
       <div>
@@ -377,7 +377,7 @@ export function EmptyState({ title, body, action }: { title: string; body?: stri
 export function FeedStamp({ generatedAt, fetching }: { generatedAt?: string; fetching?: boolean }) {
   if (!generatedAt) return null;
   return (
-    <span className="flex items-center gap-1.5 text-[11px] text-slate-400">
+    <span className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
       <RefreshCw size={11} className={fetching ? 'animate-spin motion-reduce:animate-none' : ''} />
       Sportradar · updated {formatTime(generatedAt)}
     </span>
@@ -387,7 +387,7 @@ export function FeedStamp({ generatedAt, fetching }: { generatedAt?: string; fet
 export function StatPair({ label, value }: { label: string; value: ReactNode }) {
   return (
     <div className="min-w-0">
-      <dt className="text-[10px] font-semibold uppercase tracking-[0.08em] text-slate-400">{label}</dt>
+      <dt className="text-[10px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">{label}</dt>
       <dd className="mt-0.5 truncate text-[12px] font-medium text-slate-800">{value}</dd>
     </div>
   );

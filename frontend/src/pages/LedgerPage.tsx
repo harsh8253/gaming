@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useMemo, useState, type FormEvent } from 'react';
 import { api, ApiError } from '../api/client';
-import { StackTable } from '../components/deskUi';
+import { ListRow, MobileList, StackTable } from '../components/deskUi';
 import {
   canPostLedger,
   formatAmount,
@@ -310,7 +310,27 @@ export function LedgerPage() {
             ))}
           </select>
         </div>
-        <div className="overflow-x-auto">
+        <MobileList label="Ledger entries">
+          {entriesQuery.isLoading ? <li className="px-4 py-6 text-[14px] text-ink-soft">Loading entries…</li> : null}
+          {entriesQuery.isError ? <li className="px-4 py-6 text-[14px] text-danger" role="alert">{(entriesQuery.error as Error).message}</li> : null}
+          {(entriesQuery.data ?? []).map((row) => (
+            <ListRow
+              key={row.id}
+              title={usernameById.get(row.accountUserId) ?? row.accountUserId}
+              subtitle={formatDate(row.createdAt)}
+              meta={<span className="font-mono text-[11px]">{row.journalId}</span>}
+              trailing={
+                <span className={row.side === 'CREDIT' ? 'text-blue' : 'text-ink'}>
+                  {row.side === 'CREDIT' ? '+ ' : '− '}
+                  {formatAmount(row.amount)}
+                </span>
+              }
+              trailingSub={<span className="text-[11px] font-semibold tracking-[0.06em] text-slate-500">{row.side}</span>}
+            />
+          ))}
+          {entriesQuery.data?.length === 0 ? <li className="px-4 py-6 text-[14px] text-ink-soft">No ledger entries yet.</li> : null}
+        </MobileList>
+        <div className="hidden overflow-x-auto md:block">
           <StackTable className="min-w-full text-left text-sm">
             <thead className="border-b border-line bg-paper text-sm text-ink-soft">
               <tr>

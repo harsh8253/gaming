@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState, type FormEvent } from 'react';
 import { api, ApiError } from '../api/client';
-import { StackTable } from '../components/deskUi';
+import { ListRow, MobileList, StackTable } from '../components/deskUi';
 import {
   canCreateUsers,
   CREATABLE_ROLE,
@@ -111,7 +111,24 @@ export function UsersPage() {
       ) : null}
 
       <section className="surface overflow-hidden rounded-xl">
-        <div className="overflow-x-auto">
+        <MobileList label="Users in scope">
+          {usersQuery.isLoading ? <li className="px-4 py-6 text-[14px] text-ink-soft">Loading users…</li> : null}
+          {usersQuery.isError ? <li className="px-4 py-6 text-[14px] text-danger" role="alert">{(usersQuery.error as Error).message}</li> : null}
+          {(usersQuery.data ?? []).map((row) => (
+            <ListRow
+              key={row.id}
+              title={row.username}
+              subtitle={`${ROLE_LABEL[row.role]} · joined ${formatDate(row.createdAt)}`}
+              meta={
+                <span className="font-mono text-[11px]">
+                  {row.parentUserId ? `Parent ${row.parentUserId}` : 'Top of hierarchy'}
+                </span>
+              }
+            />
+          ))}
+          {usersQuery.data?.length === 0 ? <li className="px-4 py-6 text-[14px] text-ink-soft">No users in scope.</li> : null}
+        </MobileList>
+        <div className="hidden overflow-x-auto md:block">
           <StackTable className="min-w-full text-left text-sm">
             <thead className="border-b border-line bg-paper text-sm text-ink-soft">
               <tr>

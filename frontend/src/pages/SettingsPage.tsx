@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { Bell, Building2, Laptop, ShieldCheck, Smartphone, TriangleAlert } from 'lucide-react';
-import { Toggle } from '../components/deskUi';
+import { PageHeader, Toggle } from '../components/deskUi';
 import type { ShellContext } from '../components/WagerDeskShell';
 
 type Session = {
@@ -39,14 +39,14 @@ function SettingsCard({
   children: React.ReactNode;
 }) {
   return (
-    <section className="rounded-xl border border-slate-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.02)]">
-      <div className="flex items-start gap-3 border-b border-slate-100 px-5 py-4">
+    <section className="rounded-lg border border-border bg-card">
+      <div className="flex items-start gap-3 border-b border-border px-5 py-3.5">
         <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
           <Icon size={16} strokeWidth={1.8} />
         </span>
         <div>
-          <h3 className="text-[14px] font-semibold text-slate-950">{title}</h3>
-          <p className="mt-0.5 text-[11px] text-slate-400">{description}</p>
+          <h3 className="text-[14px] font-semibold text-foreground">{title}</h3>
+          <p className="mt-0.5 text-[11px] text-muted-foreground">{description}</p>
         </div>
       </div>
       <div className="p-5">{children}</div>
@@ -88,17 +88,7 @@ export function SettingsPage() {
 
   return (
     <>
-      <div className="mb-6">
-        <div className="mb-2 hidden items-center gap-2 sm:flex">
-          <span className="rounded-md bg-blue-50 px-2 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-blue-700">
-            Super Admin A
-          </span>
-          <span className="text-[11px] text-slate-400">/</span>
-          <span className="text-[11px] font-medium text-slate-500">Master network</span>
-        </div>
-        <h2 className="text-2xl font-semibold tracking-tight text-slate-950">Settings</h2>
-        <p className="mt-1 text-[13px] text-slate-500">Organization, notification, and security preferences.</p>
-      </div>
+      <PageHeader title="Settings" description="Organization, notification, and security preferences." />
 
       <div className="grid gap-6 xl:grid-cols-2">
         <div className="space-y-6">
@@ -147,7 +137,7 @@ export function SettingsPage() {
               <div className="flex items-center justify-between gap-3">
                 <div>
                   <p className="text-[12px] font-semibold text-slate-800">Exposure threshold breaches</p>
-                  <p className="text-[11px] text-slate-400">Email when a client crosses their limit</p>
+                  <p className="text-[11px] text-muted-foreground">Email when a client crosses their limit</p>
                 </div>
                 <Toggle
                   label="Exposure threshold breaches"
@@ -158,7 +148,7 @@ export function SettingsPage() {
               <div className="flex items-center justify-between gap-3">
                 <div>
                   <p className="text-[12px] font-semibold text-slate-800">Settlement approval requests</p>
-                  <p className="text-[11px] text-slate-400">Email when a master requests a settlement</p>
+                  <p className="text-[11px] text-muted-foreground">Email when a master requests a settlement</p>
                 </div>
                 <Toggle
                   label="Settlement approval requests"
@@ -169,7 +159,7 @@ export function SettingsPage() {
               <div className="flex items-center justify-between gap-3">
                 <div>
                   <p className="text-[12px] font-semibold text-slate-800">Daily cash summary</p>
-                  <p className="text-[11px] text-slate-400">A digest of every session's reconciliation</p>
+                  <p className="text-[11px] text-muted-foreground">A digest of every session's reconciliation</p>
                 </div>
                 <Toggle
                   label="Daily cash summary"
@@ -187,7 +177,7 @@ export function SettingsPage() {
               <div className="flex items-center justify-between gap-3">
                 <div>
                   <p className="text-[12px] font-semibold text-slate-800">Two-factor authentication</p>
-                  <p className="text-[11px] text-slate-400">Require a code at every sign-in</p>
+                  <p className="text-[11px] text-muted-foreground">Require a code at every sign-in</p>
                 </div>
                 <Toggle
                   label="Two-factor authentication"
@@ -211,7 +201,7 @@ export function SettingsPage() {
               </Field>
 
               <div>
-                <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-400">
+                <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
                   Active sessions
                 </p>
                 <ul className="space-y-2">
@@ -229,7 +219,7 @@ export function SettingsPage() {
                       </span>
                       <div className="min-w-0 flex-1">
                         <p className="truncate text-[12px] font-semibold text-slate-800">{session.device}</p>
-                        <p className="text-[10px] text-slate-400">
+                        <p className="text-[10px] text-muted-foreground">
                           {session.location} · {session.lastActive}
                         </p>
                       </div>

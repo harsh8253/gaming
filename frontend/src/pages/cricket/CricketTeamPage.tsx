@@ -83,14 +83,14 @@ export function CricketTeamPage() {
       ) : (
         <div className="grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1fr)_320px]">
           <div className="space-y-5">
-            <Panel title="Upcoming fixtures" aside={<span className="text-[11px] tabular-nums text-slate-400">{upcoming.length}</span>}>
+            <Panel title="Upcoming fixtures" aside={<span className="text-[11px] tabular-nums text-muted-foreground">{upcoming.length}</span>}>
               {schedule.isPending ? <SkeletonRows rows={3} /> : schedule.error ? <ErrorState error={schedule.error} onRetry={() => void schedule.refetch()} /> : upcoming.length === 0 ? (
                 <EmptyState title="No fixtures scheduled" />
               ) : (
                 <div className="divide-y divide-slate-50">{upcoming.map((item) => <MatchRow key={item.sport_event.id} item={item} showTournament />)}</div>
               )}
             </Panel>
-            <Panel title="Recent results" aside={<span className="text-[11px] tabular-nums text-slate-400">Last {recent.length}</span>}>
+            <Panel title="Recent results" aside={<span className="text-[11px] tabular-nums text-muted-foreground">Last {recent.length}</span>}>
               {results.isPending ? <SkeletonRows /> : results.error ? <ErrorState error={results.error} onRetry={() => void results.refetch()} /> : recent.length === 0 ? (
                 <EmptyState title="No recent results" />
               ) : (

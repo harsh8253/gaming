@@ -190,7 +190,7 @@ function MatchesTab({ feedId, kind }: { feedId: string; kind: 'fixtures' | 'resu
   return (
     <Panel
       title={kind === 'fixtures' ? 'Upcoming and live fixtures' : 'Completed matches'}
-      aside={<span className="text-[11px] tabular-nums text-slate-400">{items.length} matches</span>}
+      aside={<span className="text-[11px] tabular-nums text-muted-foreground">{items.length} matches</span>}
     >
       {active.isPending ? (
         <SkeletonRows />
@@ -226,7 +226,7 @@ function StandingsTab({ feedId }: { feedId: string }) {
           <div className="overflow-x-auto">
             <table className="w-full min-w-[720px] text-left">
               <thead>
-                <tr className="border-b border-slate-100 text-[10px] font-bold uppercase tracking-[0.08em] text-slate-400">
+                <tr className="border-b border-slate-100 text-[10px] font-bold uppercase tracking-[0.08em] text-muted-foreground">
                   <th className="w-12 px-5 py-3 font-semibold">#</th>
                   <th className="px-3 py-3 font-semibold">Team</th>
                   {['P', 'W', 'L', 'D', 'NR'].map((h) => (
@@ -255,10 +255,10 @@ function StandingsTab({ feedId }: { feedId: string }) {
                       {row.net_run_rate !== undefined ? `${row.net_run_rate > 0 ? '+' : ''}${row.net_run_rate.toFixed(3)}` : '—'}
                     </td>
                     <td className="px-3 py-3 text-right text-[11px] tabular-nums text-slate-500">
-                      {row.runs_for ?? '—'}{row.overs_for !== undefined && <span className="text-slate-400">/{row.overs_for}</span>}
+                      {row.runs_for ?? '—'}{row.overs_for !== undefined && <span className="text-muted-foreground">/{row.overs_for}</span>}
                     </td>
                     <td className="px-3 py-3 text-right text-[11px] tabular-nums text-slate-500">
-                      {row.runs_against ?? '—'}{row.overs_against !== undefined && <span className="text-slate-400">/{row.overs_against}</span>}
+                      {row.runs_against ?? '—'}{row.overs_against !== undefined && <span className="text-muted-foreground">/{row.overs_against}</span>}
                     </td>
                     <td className="px-5 py-3 text-right text-[13px] font-semibold tabular-nums text-slate-950">{row.points ?? 0}</td>
                   </tr>
@@ -331,12 +331,12 @@ function LeadersTab({ feedId }: { feedId: string }) {
                   <ol className="divide-y divide-slate-50">
                     {list.slice(0, 8).map((leader, index) => (
                       <li key={`${leader.player.id}-${index}`} className="flex items-center gap-3 px-5 py-2.5">
-                        <span className={`w-5 text-[11px] font-semibold tabular-nums ${leader.rank === 1 ? 'text-blue-700' : 'text-slate-400'}`}>{leader.rank}</span>
+                        <span className={`w-5 text-[11px] font-semibold tabular-nums ${leader.rank === 1 ? 'text-blue-700' : 'text-muted-foreground'}`}>{leader.rank}</span>
                         <span className="min-w-0 flex-1">
                           <Link to={`/cricket/players/${leader.player.id}`} className="block truncate text-[12px] font-semibold text-slate-800 hover:text-blue-700">
                             {playerName(leader.player.name)}
                           </Link>
-                          <span className="block truncate text-[10px] text-slate-400">{leader.team?.name}</span>
+                          <span className="block truncate text-[10px] text-muted-foreground">{leader.team?.name}</span>
                         </span>
                         <span className={`text-[13px] font-semibold tabular-nums ${leader.rank === 1 ? 'text-slate-950' : 'text-slate-700'}`}>{leaderValue(leader, meta.unit)}</span>
                       </li>
@@ -407,7 +407,7 @@ function SquadsTab({ feedId, selected, onSelect }: { feedId: string; selected: s
           <div className="overflow-x-auto">
             <table className="w-full min-w-[520px] text-left">
               <thead>
-                <tr className="border-b border-slate-100 text-[10px] font-bold uppercase tracking-[0.08em] text-slate-400">
+                <tr className="border-b border-slate-100 text-[10px] font-bold uppercase tracking-[0.08em] text-muted-foreground">
                   <th className="px-5 py-3 font-semibold">Player</th>
                   <th className="px-3 py-3 font-semibold">Role</th>
                   <th className="px-3 py-3 font-semibold">Nationality</th>

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { CalendarClock, Globe, ShieldCheck, User, Users, X } from 'lucide-react';
-import { StatusBadge, MetricCard, StackTable } from '../components/deskUi';
+import { DeskSheet } from '../components/DeskSheet';
+import { ListRow, MetricCard, MetricStrip, MobileList, PageHeader, StackTable, StatusBadge } from '../components/deskUi';
 import { auditCategoryTone, MOCK_AUDIT_LOG, type AuditCategory } from '../lib/mockDesk';
 
 type ScopeFilter = 'ALL' | AuditCategory;
@@ -47,29 +48,19 @@ export function AuditPage() {
 
   return (
     <>
-      <div className="mb-6">
-        <div className="mb-2 hidden items-center gap-2 sm:flex">
-          <span className="rounded-md bg-blue-50 px-2 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-blue-700">
-            Super Admin A
-          </span>
-          <span className="text-[11px] text-slate-400">/</span>
-          <span className="text-[11px] font-medium text-slate-500">Master network</span>
-        </div>
-        <h2 className="text-2xl font-semibold tracking-tight text-slate-950">Audit</h2>
-        <p className="mt-1 text-[13px] text-slate-500">Every sensitive action across your hierarchy, immutably logged.</p>
-      </div>
+      <PageHeader title="Audit" description="Every sensitive action across your hierarchy, immutably logged." />
 
-      <section className="grid grid-cols-2 gap-3 md:grid-cols-4">
+      <MetricStrip>
         <MetricCard label="Events today" value={String(today.length)} icon={CalendarClock} accent="blue" sub="Since midnight" />
         <MetricCard label="Total events" value={String(MOCK_AUDIT_LOG.length)} icon={ShieldCheck} accent="teal" sub="Retained log" />
         <MetricCard label="Security events" value={String(security.length)} icon={ShieldCheck} accent="red" sub="Sign-ins & settings" />
         <MetricCard label="Unique actors" value={String(actors)} icon={Users} accent="violet" sub="Across your hierarchy" />
-      </section>
+      </MetricStrip>
 
-      <section className="mt-6 rounded-xl border border-slate-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.02)]">
-        <div className="flex flex-wrap items-center gap-3 border-b border-slate-100 px-5 py-4">
+      <section className="mt-6 rounded-lg border border-border bg-card">
+        <div className="filter-bar flex flex-wrap items-center gap-3 border-b border-border px-5 py-3.5">
           <div className="relative min-w-[200px] flex-1">
-            <User size={15} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+            <User size={15} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
@@ -94,7 +85,7 @@ export function AuditPage() {
 
         {filtered.length === 0 ? (
           <div className="flex flex-col items-center gap-3 px-5 py-16 text-center">
-            <span className="flex size-10 items-center justify-center rounded-full bg-slate-100 text-slate-400">
+            <span className="flex size-10 items-center justify-center rounded-full bg-slate-100 text-muted-foreground">
               <User size={18} />
             </span>
             <div>
@@ -106,10 +97,23 @@ export function AuditPage() {
             </button>
           </div>
         ) : (
-          <div className="overflow-x-auto">
+          <>
+          <MobileList label="Audit log">
+            {filtered.map((entry) => (
+              <ListRow
+                key={entry.id}
+                onClick={() => setSelectedId(entry.id)}
+                title={entry.action}
+                subtitle={`${entry.actor} · ${entry.target}`}
+                meta={<span>{entry.timestamp}</span>}
+                trailingSub={<StatusBadge tone={auditCategoryTone(entry.category)}>{entry.category}</StatusBadge>}
+              />
+            ))}
+          </MobileList>
+          <div className="hidden overflow-x-auto md:block">
             <StackTable className="w-full min-w-[720px] text-left">
               <thead>
-                <tr className="border-b border-slate-100 text-[10px] font-bold uppercase tracking-[0.08em] text-slate-400">
+                <tr className="border-b border-slate-100 text-[10px] font-bold uppercase tracking-[0.08em] text-muted-foreground">
                   <th className="px-5 py-3 font-semibold">Actor</th>
                   <th className="px-3 py-3 font-semibold">Action</th>
                   <th className="px-3 py-3 font-semibold">Target</th>
@@ -126,66 +130,60 @@ export function AuditPage() {
                   >
                     <td className="px-5 py-3.5">
                       <p className="text-[12px] font-semibold text-slate-800">{entry.actor}</p>
-                      <p className="text-[10px] text-slate-400">{entry.role}</p>
+                      <p className="text-[10px] text-muted-foreground">{entry.role}</p>
                     </td>
                     <td className="px-3 py-3.5 text-[12px] text-slate-700">{entry.action}</td>
                     <td className="px-3 py-3.5 text-[11px] text-slate-500">{entry.target}</td>
                     <td className="px-3 py-3.5">
                       <StatusBadge tone={auditCategoryTone(entry.category)}>{entry.category}</StatusBadge>
                     </td>
-                    <td className="px-5 py-3.5 text-right text-[11px] text-slate-400">{entry.timestamp}</td>
+                    <td className="px-5 py-3.5 text-right text-[11px] text-muted-foreground">{entry.timestamp}</td>
                   </tr>
                 ))}
               </tbody>
             </StackTable>
           </div>
+          </>
         )}
       </section>
 
       {selected && (
-        <div className="fixed inset-0 z-40 flex items-end justify-center sm:items-center sm:px-4" role="presentation">
-          <button
-            aria-label="Close event details"
-            onClick={() => setSelectedId(null)}
-            className="absolute inset-0 bg-slate-950/30 backdrop-blur-[1px]"
-          />
-          <div role="dialog" aria-modal="true" aria-label="Audit event" className="relative max-h-[92dvh] w-full overflow-y-auto rounded-t-2xl bg-white p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] shadow-2xl sm:max-w-sm sm:rounded-xl sm:p-6">
-            <div className="mb-4 flex items-start justify-between">
-              <div>
-                <p className="text-[15px] font-semibold text-slate-950">{selected.action}</p>
-                <p className="mt-0.5 text-[11px] text-slate-400">{selected.id}</p>
-              </div>
-              <button
-                onClick={() => setSelectedId(null)}
-                aria-label="Close"
-                className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600"
-              >
-                <X size={16} />
-              </button>
+        <DeskSheet label="Audit event" onClose={() => setSelectedId(null)} variant="dialog">
+          <div className="mb-4 flex items-start justify-between">
+            <div>
+              <p className="text-[15px] font-semibold text-slate-950">{selected.action}</p>
+              <p className="font-mono mt-0.5 text-[11px] text-muted-foreground">{selected.id}</p>
             </div>
-            <div className="mb-4">
-              <StatusBadge tone={auditCategoryTone(selected.category)}>{selected.category}</StatusBadge>
-            </div>
-            <dl className="space-y-3 text-[12px]">
-              <div className="flex items-center gap-2 text-slate-600">
-                <User size={13} className="text-slate-400" />
-                {selected.actor} · {selected.role}
-              </div>
-              <div className="flex items-center gap-2 text-slate-600">
-                <CalendarClock size={13} className="text-slate-400" />
-                {selected.timestamp}
-              </div>
-              <div className="flex items-center gap-2 text-slate-600">
-                <Globe size={13} className="text-slate-400" />
-                {selected.ip}
-              </div>
-              <div className="rounded-lg bg-slate-50 px-3 py-2.5">
-                <dt className="text-[10px] font-semibold uppercase tracking-[0.08em] text-slate-400">Target</dt>
-                <dd className="mt-1 font-medium text-slate-800">{selected.target}</dd>
-              </div>
-            </dl>
+            <button
+              onClick={() => setSelectedId(null)}
+              aria-label="Close"
+              className="rounded-lg p-1.5 text-muted-foreground hover:bg-slate-100 hover:text-slate-600"
+            >
+              <X size={16} />
+            </button>
           </div>
-        </div>
+          <div className="mb-4">
+            <StatusBadge tone={auditCategoryTone(selected.category)}>{selected.category}</StatusBadge>
+          </div>
+          <dl className="space-y-3 text-[12px]">
+            <div className="flex items-center gap-2 text-slate-600">
+              <User size={13} className="text-muted-foreground" />
+              {selected.actor} · {selected.role}
+            </div>
+            <div className="flex items-center gap-2 text-slate-600">
+              <CalendarClock size={13} className="text-muted-foreground" />
+              {selected.timestamp}
+            </div>
+            <div className="flex items-center gap-2 text-slate-600">
+              <Globe size={13} className="text-muted-foreground" />
+              {selected.ip}
+            </div>
+            <div className="rounded-lg bg-slate-50 px-3 py-2.5">
+              <dt className="text-[10px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">Target</dt>
+              <dd className="mt-1 font-medium text-slate-800">{selected.target}</dd>
+            </div>
+          </dl>
+        </DeskSheet>
       )}
     </>
   );

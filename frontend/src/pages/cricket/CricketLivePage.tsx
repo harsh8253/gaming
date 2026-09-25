@@ -169,9 +169,9 @@ export function CricketLivePage() {
             <h3 id="live-now" className="text-[13px] font-semibold text-slate-900">
               Live now
             </h3>
-            <span className="text-[11px] text-slate-400">Scores refresh every minute</span>
+            <span className="text-[11px] text-muted-foreground">Scores refresh every minute</span>
           </div>
-          <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
+          <div className="no-scrollbar -mx-4 flex snap-x snap-mandatory scroll-px-4 gap-3 overflow-x-auto px-4 pb-1 md:mx-0 md:grid md:grid-cols-2 md:overflow-visible md:px-0 md:pb-0 xl:grid-cols-3 [&>*]:w-[86%] [&>*]:shrink-0 [&>*]:snap-start md:[&>*]:w-auto">
             {liveCards.map((item) => (
               <LiveScoreCard key={item.sport_event.id} item={item} />
             ))}
@@ -180,8 +180,8 @@ export function CricketLivePage() {
       )}
 
       <Panel>
-        <div className="flex flex-wrap items-center gap-3 border-b border-slate-100 px-5 py-4">
-          <div className="flex items-center gap-1">
+        <div className="flex flex-wrap items-center gap-2.5 border-b border-slate-100 px-4 py-3 sm:gap-3 sm:px-5 sm:py-4">
+          <div className="flex w-full items-center gap-1 sm:w-auto">
             <button onClick={() => goTo(shiftDateKey(date, -1))} aria-label="Previous day" className="rounded-lg p-2 text-slate-500 hover:bg-slate-100 hover:text-slate-800">
               <ChevronLeft size={16} />
             </button>
@@ -190,7 +190,7 @@ export function CricketLivePage() {
               value={date}
               onChange={(e) => e.target.value && goTo(e.target.value)}
               aria-label="Match day"
-              className={`${inputClass} tabular-nums`}
+              className={`${inputClass} min-w-0 flex-1 tabular-nums sm:flex-none`}
             />
             <button onClick={() => goTo(shiftDateKey(date, 1))} aria-label="Next day" className="rounded-lg p-2 text-slate-500 hover:bg-slate-100 hover:text-slate-800">
               <ChevronRight size={16} />
@@ -214,7 +214,7 @@ export function CricketLivePage() {
             ]}
           />
           <div className="relative min-w-[200px] flex-1">
-            <Search size={15} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+            <Search size={15} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
@@ -264,7 +264,7 @@ export function CricketLivePage() {
                 ) : (
                   <span className="text-[12px] font-semibold text-slate-900">{group.name}</span>
                 )}
-                <span className="text-[11px] text-slate-400">{[group.category, formatLabel(group.type)].filter((p) => p && p !== '—').join(' · ')}</span>
+                <span className="text-[11px] text-muted-foreground">{[group.category, formatLabel(group.type)].filter((p) => p && p !== '—').join(' · ')}</span>
               </div>
               <div className="divide-y divide-slate-50">
                 {group.items.map((item) => (
@@ -287,7 +287,7 @@ function LiveScoreCard({ item }: { item: EventWithStatus }) {
   return (
     <Link
       to={`/cricket/matches/${event.id}`}
-      className="group flex flex-col rounded-xl border border-amber-200/70 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.03)] transition-shadow hover:shadow-[0_6px_20px_-8px_rgba(15,23,42,0.18)]"
+      className="group flex flex-col rounded-lg border border-border bg-card p-4 transition-colors hover:bg-accent/40"
     >
       <div className="flex items-center justify-between gap-2">
         <span className="truncate text-[11px] font-medium text-slate-500">{event.season?.name ?? event.tournament?.name}</span>
@@ -311,11 +311,11 @@ function LiveScoreCard({ item }: { item: EventWithStatus }) {
                       <span className={`text-[17px] font-semibold tracking-tight ${batting && inn.number === status?.current_inning ? 'text-slate-950' : 'text-slate-500'}`}>
                         {inn.score}
                       </span>
-                      {inn.overs !== undefined && <span className="text-[10px] text-slate-400">{formatOvers(inn.overs)}</span>}
+                      {inn.overs !== undefined && <span className="text-[10px] text-muted-foreground">{formatOvers(inn.overs)}</span>}
                     </span>
                   ))
                 ) : (
-                  <span className="text-[12px] text-slate-400">Yet to bat</span>
+                  <span className="text-[12px] text-muted-foreground">Yet to bat</span>
                 )}
               </span>
             </div>

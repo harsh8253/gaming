@@ -21,3 +21,12 @@ npm-debug.log*
 .idea
 .vscode
 *.swp
+
+# design tooling scratch (local only)
+.impeccable/review/
+.impeccable/questions/
+.impeccable/build/
+.impeccable/config.local.json
+
+# vercel
+.vercel

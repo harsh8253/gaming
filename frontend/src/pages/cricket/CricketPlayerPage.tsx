@@ -52,12 +52,12 @@ export function CricketPlayerPage() {
             </dl>
           </Panel>
 
-          <Panel title="Teams and roles" aside={<span className="text-[11px] tabular-nums text-slate-400">{roles.length || profile.data?.teams?.length || 0} teams</span>}>
+          <Panel title="Teams and roles" aside={<span className="text-[11px] tabular-nums text-muted-foreground">{roles.length || profile.data?.teams?.length || 0} teams</span>}>
             {roles.length > 0 ? (
               <div className="overflow-x-auto">
                 <table className="w-full min-w-[520px] text-left">
                   <thead>
-                    <tr className="border-b border-slate-100 text-[10px] font-bold uppercase tracking-[0.08em] text-slate-400">
+                    <tr className="border-b border-slate-100 text-[10px] font-bold uppercase tracking-[0.08em] text-muted-foreground">
                       <th className="px-5 py-3 font-semibold">Team</th>
                       <th className="px-3 py-3 font-semibold">Role</th>
                       <th className="px-3 py-3 font-semibold">Since</th>

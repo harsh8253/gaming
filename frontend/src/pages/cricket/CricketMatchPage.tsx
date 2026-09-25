@@ -171,7 +171,7 @@ function Scoreboard({ data }: { data: MatchSummaryResponse }) {
         {status?.match_status && group !== 'finished' && (
           <span className="text-[12px] font-medium text-slate-600">{humanize(status.match_status)}</span>
         )}
-        {group === 'live' && <span className="ml-auto text-[11px] text-slate-400">Refreshes every minute</span>}
+        {group === 'live' && <span className="ml-auto text-[11px] text-muted-foreground">Refreshes every minute</span>}
       </div>
       <div className="grid gap-4 px-5 py-5 md:grid-cols-2 md:gap-8">
         {(['home', 'away'] as const).map((side) => {
@@ -183,18 +183,18 @@ function Scoreboard({ data }: { data: MatchSummaryResponse }) {
               <TeamMark team={team} size="lg" />
               <div className="min-w-0 flex-1">
                 <TeamLink team={team} className={`block truncate text-[15px] font-semibold ${won ? 'text-slate-950' : 'text-slate-700'}`} />
-                <p className="text-[11px] text-slate-400">{side === 'home' ? 'Home' : 'Away'}{won && <span className="ml-1.5 font-semibold text-emerald-700">· Winner</span>}</p>
+                <p className="text-[11px] text-muted-foreground">{side === 'home' ? 'Home' : 'Away'}{won && <span className="ml-1.5 font-semibold text-emerald-700">· Winner</span>}</p>
               </div>
               <div className="text-right tabular-nums">
                 {innings.length ? (
                   innings.map((inn) => (
                     <p key={inn.number} className="leading-tight">
                       <span className={`text-[24px] font-semibold tracking-tight ${won || group === 'live' ? 'text-slate-950' : 'text-slate-700'}`}>{inn.score}</span>
-                      {inn.overs !== undefined && <span className="ml-1.5 text-[11px] text-slate-400">{formatOvers(inn.overs)}</span>}
+                      {inn.overs !== undefined && <span className="ml-1.5 text-[11px] text-muted-foreground">{formatOvers(inn.overs)}</span>}
                     </p>
                   ))
                 ) : (
-                  <p className="text-[12px] text-slate-400">{group === 'upcoming' ? '—' : 'Yet to bat'}</p>
+                  <p className="text-[12px] text-muted-foreground">{group === 'upcoming' ? '—' : 'Yet to bat'}</p>
                 )}
               </div>
             </div>
@@ -246,7 +246,7 @@ function ScorecardTab({ cards, event }: { cards: InningsCard[]; event: SportEven
         aside={
           <span className="text-[12px] tabular-nums text-slate-600">
             <span className="text-[15px] font-semibold text-slate-950">{card.total}</span>
-            {card.overs && <span className="ml-1.5 text-slate-400">{formatOvers(card.overs)}</span>}
+            {card.overs && <span className="ml-1.5 text-muted-foreground">{formatOvers(card.overs)}</span>}
             {card.runRate !== null && <span className="ml-3 text-slate-500">RR {card.runRate.toFixed(2)}</span>}
           </span>
         }
@@ -254,7 +254,7 @@ function ScorecardTab({ cards, event }: { cards: InningsCard[]; event: SportEven
         <div className="overflow-x-auto">
           <table className="w-full min-w-[640px] text-left">
             <thead>
-              <tr className="border-b border-slate-100 text-[10px] font-bold uppercase tracking-[0.08em] text-slate-400">
+              <tr className="border-b border-slate-100 text-[10px] font-bold uppercase tracking-[0.08em] text-muted-foreground">
                 <th className="w-[26%] px-5 py-3 font-semibold">Batter</th>
                 <th className="px-3 py-3 font-semibold">Dismissal</th>
                 {['R', 'B', '4s', '6s', 'SR'].map((h) => (
@@ -294,7 +294,7 @@ function ScorecardTab({ cards, event }: { cards: InningsCard[]; event: SportEven
           <div className="overflow-x-auto">
             <table className="w-full min-w-[520px] text-left">
               <thead>
-                <tr className="border-b border-slate-100 text-[10px] font-bold uppercase tracking-[0.08em] text-slate-400">
+                <tr className="border-b border-slate-100 text-[10px] font-bold uppercase tracking-[0.08em] text-muted-foreground">
                   <th className="px-5 py-3 font-semibold">Bowler</th>
                   {['O', 'M', 'R', 'W', 'Econ', '0s', 'Wd', 'Nb'].map((h) => (
                     <th key={h} className="px-2.5 py-3 text-right font-semibold last:pr-5">{h}</th>
@@ -336,7 +336,7 @@ function ScorecardTab({ cards, event }: { cards: InningsCard[]; event: SportEven
                     <span className="font-semibold tabular-nums text-slate-900">{f.score}</span>
                     <span className="mx-1 text-slate-300">·</span>
                     {f.player}
-                    <span className="ml-1 tabular-nums text-slate-400">({f.overs} ov)</span>
+                    <span className="ml-1 tabular-nums text-muted-foreground">({f.overs} ov)</span>
                   </li>
                 ))}
               </ol>
@@ -369,7 +369,7 @@ function OverChart({ card }: { card: InningsCard }) {
           </div>
         ))}
       </div>
-      <div className="mt-1.5 flex justify-between text-[10px] tabular-nums text-slate-400">
+      <div className="mt-1.5 flex justify-between text-[10px] tabular-nums text-muted-foreground">
         <span>Over 1</span>
         <span>Over {card.progression.at(-1)?.over ?? 1}</span>
       </div>
@@ -464,7 +464,7 @@ function CommentaryTab({ events, cards }: { events: TimelineEvent[]; cards: Inni
                         <p className="text-[12px] text-slate-500">
                           <span className="font-semibold text-slate-800">{playerName(ball.bowling_params?.bowler?.name)}</span> to{' '}
                           <span className="font-semibold text-slate-800">{playerName(ball.batting_params?.striker?.name)}</span>
-                          {ball.batting_params?.shot_type && <span className="text-slate-400"> · {humanize(ball.batting_params.shot_type)}</span>}
+                          {ball.batting_params?.shot_type && <span className="text-muted-foreground"> · {humanize(ball.batting_params.shot_type)}</span>}
                         </p>
                         {ball.commentary?.text && (
                           <p className={`mt-0.5 max-w-[75ch] text-[12px] leading-relaxed ${outcome.kind === 'wicket' ? 'font-medium text-red-800' : 'text-slate-700'}`}>{ball.commentary.text}</p>
@@ -492,14 +492,14 @@ function LineupsTab({ event, lineups }: { event: SportEvent; lineups: { team: 'h
         const team = sideOf(event, side);
         const players = lineups.find((l) => l.team === side)?.starting_lineup ?? [];
         return (
-          <Panel key={side} title={<span className="flex items-center gap-3"><TeamMark team={team} size="sm" />{team?.name ?? side}</span>} aside={<span className="text-[11px] text-slate-400">Playing XI</span>}>
+          <Panel key={side} title={<span className="flex items-center gap-3"><TeamMark team={team} size="sm" />{team?.name ?? side}</span>} aside={<span className="text-[11px] text-muted-foreground">Playing XI</span>}>
             {players.length === 0 ? (
               <p className="px-5 py-4 text-[12px] text-slate-500">Not announced.</p>
             ) : (
               <ol className="divide-y divide-slate-50">
                 {players.map((player, index) => (
                   <li key={player.id} className="flex items-center gap-3 px-5 py-2.5">
-                    <span className="w-5 text-[11px] font-semibold tabular-nums text-slate-400">{index + 1}</span>
+                    <span className="w-5 text-[11px] font-semibold tabular-nums text-muted-foreground">{index + 1}</span>
                     <Link to={`/cricket/players/${player.id}`} className="min-w-0 flex-1 truncate text-[12px] font-semibold text-slate-800 hover:text-blue-700">
                       {playerName(player.name)}
                       {player.captain && <span className="ml-1.5 text-[10px] font-bold text-blue-700">(c)</span>}
@@ -547,7 +547,7 @@ function PartnershipsTab({ summary, names, cards }: { summary: MatchSummaryRespo
                     <span className="text-[11px] font-semibold text-slate-500">{ordinal(p.wicket_number)} wicket</span>
                     <span className="text-[13px] font-semibold tabular-nums text-slate-950">
                       {p.runs ?? 0}
-                      <span className="ml-1 text-[11px] font-normal text-slate-400">({p.balls_faced ?? 0})</span>
+                      <span className="ml-1 text-[11px] font-normal text-muted-foreground">({p.balls_faced ?? 0})</span>
                     </span>
                   </div>
                   <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-slate-100">
@@ -557,7 +557,7 @@ function PartnershipsTab({ summary, names, cards }: { summary: MatchSummaryRespo
                     {(p.players ?? []).map((pl, i) => (
                       <span key={pl.id}>
                         {i > 0 && <span className="text-slate-300"> & </span>}
-                        {playerName(names.get(pl.id))} <span className="tabular-nums text-slate-400">{pl.runs ?? 0} ({pl.balls_faced ?? 0})</span>
+                        {playerName(names.get(pl.id))} <span className="tabular-nums text-muted-foreground">{pl.runs ?? 0} ({pl.balls_faced ?? 0})</span>
                       </span>
                     ))}
                   </p>

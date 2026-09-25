@@ -52,6 +52,9 @@ export class ApiError extends Error {
   }
 }
 
+// Empty in development (the Vite proxy forwards /auth, /cricket, ...); "/api" on Vercel.
+const API_BASE = import.meta.env.VITE_API_BASE ?? '';
+
 async function request<T>(
   path: string,
   options: RequestInit = {},
@@ -66,7 +69,7 @@ async function request<T>(
     headers.set('Authorization', `Bearer ${auth}`);
   }
 
-  const response = await fetch(path, { ...options, headers });
+  const response = await fetch(API_BASE + path, { ...options, headers });
   if (response.status === 204) {
     return undefined as T;
   }

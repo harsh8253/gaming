@@ -53,7 +53,7 @@ export function LoginPage() {
   const passwordToggle = (
     <button
       aria-label="Toggle password visibility"
-      className="absolute inset-y-0 right-0 flex items-center pr-3.5 text-slate-400 transition-colors hover:text-slate-600 focus:outline-none"
+      className="absolute inset-y-0 right-0 flex items-center pr-3.5 text-muted-foreground transition-colors hover:text-slate-600 focus:outline-none"
       type="button"
       onClick={() => setShowPassword((v) => !v)}
     >
@@ -179,7 +179,7 @@ export function LoginPage() {
                     Email or Username
                   </label>
                   <div className="relative flex items-center">
-                    <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+                    <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-muted-foreground">
                       <svg
                         className="h-5 w-5"
                         fill="none"
@@ -225,7 +225,7 @@ export function LoginPage() {
                     Password
                   </label>
                   <div className="relative flex items-center">
-                    <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+                    <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-muted-foreground">
                       <svg
                         className="h-5 w-5"
                         fill="none"
@@ -318,7 +318,7 @@ export function LoginPage() {
                   Contact your administrator.
                 </a>
               </p>
-              <span className="text-[11px] font-normal tracking-wider text-slate-400">
+              <span className="text-[11px] font-normal tracking-wider text-muted-foreground">
                 v1.0.0
               </span>
             </footer>
@@ -417,7 +417,7 @@ export function LoginPage() {
                 <h2 className="text-2xl font-extrabold tracking-tight text-[#0b1938] sm:text-[26px]">
                   Wager<span className="text-[#1d6fe9]">Desk</span>
                 </h2>
-                <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.24em] text-slate-400">
+                <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.24em] text-muted-foreground">
                   OPERATE • MANAGE • STAY AHEAD
                 </p>
               </header>
@@ -453,7 +453,7 @@ export function LoginPage() {
                     Email or Username
                   </label>
                   <div className="relative rounded-xl shadow-sm">
-                    <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+                    <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-muted-foreground">
                       <svg
                         className="h-5 w-5"
                         fill="none"
@@ -490,7 +490,7 @@ export function LoginPage() {
                     Password
                   </label>
                   <div className="relative rounded-xl shadow-sm">
-                    <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+                    <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-muted-foreground">
                       <svg
                         className="h-5 w-5"
                         fill="none"
@@ -579,7 +579,7 @@ export function LoginPage() {
                     Contact your administrator.
                   </a>
                 </p>
-                <p className="mt-2 font-mono text-[11px] text-slate-400">
+                <p className="mt-2 font-mono text-[11px] text-muted-foreground">
                   v1.0.0
                 </p>
               </footer>
@@ -608,7 +608,7 @@ export function LoginPage() {
           </div>
         </main>
 
-        <footer className="relative z-10 w-full py-4 text-center text-xs text-slate-400">
+        <footer className="relative z-10 w-full py-4 text-center text-xs text-muted-foreground">
           <p>© 2026 WagerDesk. All rights reserved.</p>
         </footer>
       </div>
