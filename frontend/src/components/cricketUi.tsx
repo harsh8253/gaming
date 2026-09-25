@@ -231,6 +231,13 @@ export function Matchup({
   );
 }
 
+/** An inline Matchup for a "Home vs Away" string; anything else renders as plain text. */
+export function FixtureLabel({ match, className = '' }: { match: string; className?: string }) {
+  const teams = match.split(/\s+(?:vs?\.?)\s+/i);
+  if (teams.length !== 2 || !teams[0] || !teams[1]) return <p className={className}>{match}</p>;
+  return <Matchup home={teams[0]} away={teams[1]} layout="inline" className={className} />;
+}
+
 export function TeamLink({ team, className = '' }: { team?: Team; className?: string }) {
   if (!team) return <span className={className}>TBC</span>;
   if (team.virtual) return <span className={className}>{team.name}</span>;

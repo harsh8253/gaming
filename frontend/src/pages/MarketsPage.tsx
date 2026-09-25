@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState, type FormEvent } from 'react';
 import { useNavigate, useOutletContext, useSearchParams } from 'react-router-dom';
 import { ChevronRight, ClipboardCheck, PauseCircle, PlayCircle, PlusCircle, Search, ShieldAlert, X } from 'lucide-react';
+import { FixtureLabel } from '../components/cricketUi';
 import { MetricCard, StackTable, StatusBadge } from '../components/deskUi';
 import type { ShellContext } from '../components/WagerDeskShell';
 import {
@@ -192,8 +193,8 @@ export function MarketsPage() {
                   >
                     <td className="px-5 py-3.5 text-[12px] font-semibold text-slate-800">{market.marketType}</td>
                     <td className="px-3 py-3.5">
-                      <p className="text-[12px] font-medium text-slate-700">{market.match}</p>
-                      <p className="mt-0.5 text-[10px] text-slate-400">{market.format}</p>
+                      <FixtureLabel match={market.match} className="text-[12px] font-medium text-slate-700" />
+                      <p className="mt-1 text-[10px] text-slate-400">{market.format}</p>
                     </td>
                     <td className="px-3 py-3.5">
                       <StatusBadge tone={marketStatusTone(market.status)}>{market.status}</StatusBadge>
@@ -228,7 +229,7 @@ export function MarketsPage() {
             <div className="flex items-start justify-between gap-3 border-b border-slate-100 px-6 py-5">
               <div>
                 <p className="text-[15px] font-semibold text-slate-950">{selected.marketType}</p>
-                <p className="mt-0.5 text-[11px] text-slate-400">{selected.match}</p>
+                <FixtureLabel match={selected.match} className="mt-1.5 text-[11px] text-slate-500" />
                 <div className="mt-1.5">
                   <StatusBadge tone={marketStatusTone(selected.status)}>{selected.status}</StatusBadge>
                 </div>
@@ -248,8 +249,8 @@ export function MarketsPage() {
                 className="flex w-full items-center gap-3 rounded-lg border border-slate-100 p-3 text-left hover:bg-slate-50"
               >
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-[12px] font-semibold text-slate-800">{selected.match}</p>
-                  <p className="text-[10px] text-slate-400">{selected.format} · View match</p>
+                  <FixtureLabel match={selected.match} className="text-[12px] font-semibold text-slate-800" />
+                  <p className="mt-1 text-[10px] text-slate-400">{selected.format} · View match</p>
                 </div>
                 <ChevronRight size={14} className="shrink-0 text-slate-300" />
               </button>

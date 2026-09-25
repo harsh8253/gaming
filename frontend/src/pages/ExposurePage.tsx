@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { AlertTriangle, ShieldAlert, Target, TrendingUp } from 'lucide-react';
+import { Matchup } from '../components/cricketUi';
 import { ClientAvatar, MetricCard, StackTable } from '../components/deskUi';
 import { formatINR, MOCK_CLIENTS, MOCK_MATCHES, FORMATS } from '../lib/mockDesk';
 
@@ -152,7 +153,7 @@ export function ExposurePage() {
                   className="cursor-pointer border-b border-slate-50 last:border-0 hover:bg-slate-50/70"
                 >
                   <td className="px-5 py-3.5 text-[12px] font-semibold text-slate-800">
-                    {match.home} vs {match.away}
+                    <Matchup home={match.home} away={match.away} layout="inline" />
                   </td>
                   <td className="px-3 py-3.5 text-[12px] text-slate-600">{match.format}</td>
                   <td className="px-5 py-3.5 text-right text-[12px] font-medium tabular-nums text-amber-700">

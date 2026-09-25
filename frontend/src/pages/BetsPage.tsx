@@ -14,7 +14,7 @@ import {
   Wallet,
   X,
 } from 'lucide-react';
-import { Matchup } from '../components/cricketUi';
+import { FixtureLabel } from '../components/cricketUi';
 import { ClientAvatar, MetricCard, StackTable, StatusBadge } from '../components/deskUi';
 import type { ShellContext } from '../components/WagerDeskShell';
 import {
@@ -34,12 +34,6 @@ const ACTIVE_CLIENTS = MOCK_CLIENTS.filter((c) => c.status === 'ACTIVE');
 
 function nextBetId(count: number): string {
   return `BET-${String(864 + count).padStart(4, '0')}`;
-}
-
-function BetMatch({ match, className = '' }: { match: string; className?: string }) {
-  const teams = match.split(/\s+(?:vs?\.?)\s+/i);
-  if (teams.length !== 2 || !teams[0] || !teams[1]) return <p className={className}>{match}</p>;
-  return <Matchup home={teams[0]} away={teams[1]} layout="inline" className={className} />;
 }
 
 export function BetsPage() {
@@ -263,7 +257,7 @@ export function BetsPage() {
                       </td>
                       <td className="px-3 py-3.5 text-[12px] text-slate-600">{bet.format}</td>
                       <td className="px-3 py-3.5">
-                        <BetMatch match={bet.match} className="text-[12px] font-medium text-slate-800" />
+                        <FixtureLabel match={bet.match} className="text-[12px] font-medium text-slate-800" />
                         <p className="mt-1 text-[10px] text-slate-400">
                           {bet.market} · {bet.selection} @ {bet.odds.toFixed(2)}
                         </p>
@@ -339,7 +333,7 @@ export function BetsPage() {
               )}
 
               <div className="mt-5">
-                <BetMatch match={selected.match} className="text-[13px] font-semibold text-slate-900" />
+                <FixtureLabel match={selected.match} className="text-[13px] font-semibold text-slate-900" />
                 <p className="mt-0.5 text-[11px] text-slate-500">
                   {selected.format} · {selected.market}
                 </p>
