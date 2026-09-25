@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useOutletContext, useSearchParams } from 'react-router-dom';
 import { CalendarClock, CheckCircle2, ClipboardCheck, Search, User, Wallet, X, XCircle } from 'lucide-react';
+import { FixtureLabel } from '../components/cricketUi';
 import { MetricCard, StackTable, StatusBadge } from '../components/deskUi';
 import type { ShellContext } from '../components/WagerDeskShell';
 import {
@@ -155,7 +156,7 @@ export function SettlementsPage() {
                   >
                     <td className="px-5 py-3.5">
                       <p className="text-[11px] font-semibold text-blue-600">{settlement.id}</p>
-                      <p className="mt-0.5 text-[12px] font-medium text-slate-700">{settlement.match}</p>
+                      <FixtureLabel match={settlement.match} className="mt-1 text-[12px] font-medium text-slate-700" />
                     </td>
                     <td className="px-3 py-3.5 text-right text-[12px] font-medium tabular-nums text-slate-700">
                       {settlement.betsCount}
@@ -191,7 +192,7 @@ export function SettlementsPage() {
             <div className="flex items-start justify-between gap-3 border-b border-slate-100 px-6 py-5">
               <div>
                 <p className="text-[15px] font-semibold text-slate-950">{selected.id}</p>
-                <p className="mt-0.5 text-[11px] text-slate-400">{selected.match}</p>
+                <FixtureLabel match={selected.match} className="mt-1.5 text-[11px] text-slate-500" />
                 <div className="mt-1.5">
                   <StatusBadge tone={settlementStatusTone(selected.status)}>{selected.status}</StatusBadge>
                 </div>
