@@ -14,6 +14,7 @@ import {
   Wallet,
   X,
 } from 'lucide-react';
+import { Matchup } from '../components/cricketUi';
 import { ClientAvatar, MetricCard, StackTable, StatusBadge } from '../components/deskUi';
 import type { ShellContext } from '../components/WagerDeskShell';
 import {
@@ -21,7 +22,7 @@ import {
   formatINR,
   MOCK_BETS,
   MOCK_CLIENTS,
-  SPORTS,
+  FORMATS,
   type BetStatus,
   type MockBet,
 } from '../lib/mockDesk';
@@ -35,6 +36,12 @@ function nextBetId(count: number): string {
   return `BET-${String(864 + count).padStart(4, '0')}`;
 }
 
+function BetMatch({ match, className = '' }: { match: string; className?: string }) {
+  const teams = match.split(/\s+(?:vs?\.?)\s+/i);
+  if (teams.length !== 2 || !teams[0] || !teams[1]) return <p className={className}>{match}</p>;
+  return <Matchup home={teams[0]} away={teams[1]} layout="inline" className={className} />;
+}
+
 export function BetsPage() {
   const navigate = useNavigate();
   const { setNotice } = useOutletContext<ShellContext>();
@@ -42,7 +49,7 @@ export function BetsPage() {
   const [bets, setBets] = useState<MockBet[]>(MOCK_BETS);
   const [query, setQuery] = useState('');
   const [scope, setScope] = useState<ScopeFilter>('ALL');
-  const [sport, setSport] = useState('ALL');
+  const [format, setFormat] = useState('ALL');
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [addOpen, setAddOpen] = useState(false);
 
@@ -78,10 +85,10 @@ export function BetsPage() {
       const matchesScope =
         scope === 'ALL' ||
         (scope === 'LIVE' ? LIVE_STATUSES.has(bet.status) : !LIVE_STATUSES.has(bet.status));
-      const matchesSport = sport === 'ALL' || bet.sport === sport;
-      return matchesQuery && matchesScope && matchesSport;
+      const matchesFormat = format === 'ALL' || bet.format === format;
+      return matchesQuery && matchesScope && matchesFormat;
     });
-  }, [bets, query, scope, sport]);
+  }, [bets, query, scope, format]);
 
   const selected = bets.find((b) => b.id === selectedId) ?? null;
   const selectedClient = selected ? MOCK_CLIENTS.find((c) => c.id === selected.clientId) : null;
@@ -101,7 +108,7 @@ export function BetsPage() {
   function clearFilters() {
     setQuery('');
     setScope('ALL');
-    setSport('ALL');
+    setFormat('ALL');
   }
 
   function settleBet(bet: MockBet, status: BetStatus) {
@@ -116,7 +123,7 @@ export function BetsPage() {
     const clientId = String(form.get('clientId') ?? '');
     const client = ACTIVE_CLIENTS.find((c) => c.id === clientId) ?? ACTIVE_CLIENTS[0];
     if (!client) return;
-    const sportValue = String(form.get('sport') ?? SPORTS[0]);
+    const formatValue = FORMATS.find((f) => f === form.get('format')) ?? FORMATS[0];
     const match = String(form.get('match') ?? '').trim();
     const market = String(form.get('market') ?? '').trim();
     const selection = String(form.get('selection') ?? '').trim();
@@ -128,7 +135,7 @@ export function BetsPage() {
       id: nextBetId(bets.length),
       client: client.name,
       clientId: client.id,
-      sport: sportValue,
+      format: formatValue,
       match,
       market,
       selection,
@@ -199,13 +206,13 @@ export function BetsPage() {
             ))}
           </div>
           <select
-            value={sport}
-            onChange={(e) => setSport(e.target.value)}
-            aria-label="Filter by sport"
+            value={format}
+            onChange={(e) => setFormat(e.target.value)}
+            aria-label="Filter by format"
             className="h-9 rounded-lg border border-slate-200 bg-white px-2.5 text-[12px] text-slate-600 outline-none focus:border-blue-300 focus:ring-2 focus:ring-blue-100"
           >
-            <option value="ALL">All sports</option>
-            {SPORTS.map((s) => (
+            <option value="ALL">All formats</option>
+            {FORMATS.map((s) => (
               <option key={s} value={s}>
                 {s}
               </option>
@@ -221,7 +228,7 @@ export function BetsPage() {
             <div>
               <p className="text-[13px] font-semibold text-slate-800">No bets match these filters</p>
               <p className="mt-1 text-[12px] text-slate-500">
-                Try a different client, match, sport, or scope.
+                Try a different client, match, format, or scope.
               </p>
             </div>
             <button onClick={clearFilters} className="text-[12px] font-semibold text-blue-600 hover:text-blue-800">
@@ -235,7 +242,7 @@ export function BetsPage() {
                 <thead>
                   <tr className="border-b border-slate-100 text-[10px] font-bold uppercase tracking-[0.08em] text-slate-400">
                     <th className="px-5 py-3 font-semibold">Bet / Client</th>
-                    <th className="px-3 py-3 font-semibold">Sport</th>
+                    <th className="px-3 py-3 font-semibold">Format</th>
                     <th className="px-3 py-3 font-semibold">Match / Selection</th>
                     <th className="px-3 py-3 text-right font-semibold">Stake</th>
                     <th className="px-3 py-3 text-right font-semibold">Exposure</th>
@@ -254,10 +261,10 @@ export function BetsPage() {
                         <p className="text-[11px] font-semibold text-blue-600">{bet.id}</p>
                         <p className="mt-0.5 text-[11px] text-slate-500">{bet.client}</p>
                       </td>
-                      <td className="px-3 py-3.5 text-[12px] text-slate-600">{bet.sport}</td>
+                      <td className="px-3 py-3.5 text-[12px] text-slate-600">{bet.format}</td>
                       <td className="px-3 py-3.5">
-                        <p className="text-[12px] font-medium text-slate-800">{bet.match}</p>
-                        <p className="mt-0.5 text-[10px] text-slate-400">
+                        <BetMatch match={bet.match} className="text-[12px] font-medium text-slate-800" />
+                        <p className="mt-1 text-[10px] text-slate-400">
                           {bet.market} · {bet.selection} @ {bet.odds.toFixed(2)}
                         </p>
                       </td>
@@ -332,9 +339,9 @@ export function BetsPage() {
               )}
 
               <div className="mt-5">
-                <p className="text-[13px] font-semibold text-slate-900">{selected.match}</p>
+                <BetMatch match={selected.match} className="text-[13px] font-semibold text-slate-900" />
                 <p className="mt-0.5 text-[11px] text-slate-500">
-                  {selected.sport} · {selected.market}
+                  {selected.format} · {selected.market}
                 </p>
                 <p className="mt-1 text-[12px] font-medium text-blue-700">
                   Selection: {selected.selection} @ {selected.odds.toFixed(2)}
@@ -429,12 +436,12 @@ export function BetsPage() {
                 </select>
               </label>
               <label className="block">
-                <span className="mb-1 block text-[11px] font-semibold text-slate-600">Sport</span>
+                <span className="mb-1 block text-[11px] font-semibold text-slate-600">Format</span>
                 <select
-                  name="sport"
+                  name="format"
                   className="h-9 w-full rounded-lg border border-slate-200 px-3 text-[12px] outline-none focus:border-blue-300 focus:ring-2 focus:ring-blue-100"
                 >
-                  {SPORTS.map((s) => (
+                  {FORMATS.map((s) => (
                     <option key={s} value={s}>
                       {s}
                     </option>

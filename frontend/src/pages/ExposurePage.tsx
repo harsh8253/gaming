@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { AlertTriangle, ShieldAlert, Target, TrendingUp } from 'lucide-react';
 import { ClientAvatar, MetricCard, StackTable } from '../components/deskUi';
-import { formatINR, MOCK_CLIENTS, MOCK_MATCHES, SPORTS } from '../lib/mockDesk';
+import { formatINR, MOCK_CLIENTS, MOCK_MATCHES, FORMATS } from '../lib/mockDesk';
 
 export function ExposurePage() {
   const navigate = useNavigate();
@@ -9,14 +9,14 @@ export function ExposurePage() {
   const totalExposure = MOCK_CLIENTS.reduce((sum, c) => sum + c.exposure, 0);
   const totalLimit = MOCK_CLIENTS.reduce((sum, c) => sum + c.limit, 0);
 
-  const bySport = SPORTS.map((sport) => {
-    const matches = MOCK_MATCHES.filter((m) => m.sport === sport && m.exposure > 0);
+  const byFormat = FORMATS.map((format) => {
+    const matches = MOCK_MATCHES.filter((m) => m.format === format && m.exposure > 0);
     const exposure = matches.reduce((sum, m) => sum + m.exposure, 0);
-    return { sport, exposure };
+    return { format, exposure };
   })
     .filter((row) => row.exposure > 0)
     .sort((a, b) => b.exposure - a.exposure);
-  const maxSportExposure = Math.max(...bySport.map((r) => r.exposure), 1);
+  const maxFormatExposure = Math.max(...byFormat.map((r) => r.exposure), 1);
 
   const topClients = [...MOCK_CLIENTS]
     .filter((c) => c.exposure > 0)
@@ -38,7 +38,7 @@ export function ExposurePage() {
           <span className="text-[11px] font-medium text-slate-500">Master network</span>
         </div>
         <h2 className="text-2xl font-semibold tracking-tight text-slate-950">Exposure</h2>
-        <p className="mt-1 text-[13px] text-slate-500">Live liability across clients, sports, and matches.</p>
+        <p className="mt-1 text-[13px] text-slate-500">Live liability across clients, formats, and matches.</p>
       </div>
 
       <section className="grid grid-cols-2 gap-3 md:grid-cols-4">
@@ -108,20 +108,20 @@ export function ExposurePage() {
 
         <section className="rounded-xl border border-slate-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.02)]">
           <div className="border-b border-slate-100 px-5 py-4">
-            <h3 className="text-[14px] font-semibold text-slate-950">Exposure by sport</h3>
+            <h3 className="text-[14px] font-semibold text-slate-950">Exposure by format</h3>
             <p className="mt-0.5 text-[11px] text-slate-400">Live and upcoming fixtures</p>
           </div>
           <div className="space-y-4 p-5">
-            {bySport.map((row) => (
-              <div key={row.sport}>
+            {byFormat.map((row) => (
+              <div key={row.format}>
                 <div className="mb-1.5 flex items-center justify-between text-[11px]">
-                  <span className="font-semibold text-slate-700">{row.sport}</span>
+                  <span className="font-semibold text-slate-700">{row.format}</span>
                   <span className="font-medium tabular-nums text-slate-500">{formatINR(row.exposure)}</span>
                 </div>
                 <div className="h-2 rounded-full bg-slate-100">
                   <div
                     className="h-2 rounded-full bg-blue-600"
-                    style={{ width: `${Math.max((row.exposure / maxSportExposure) * 100, 4)}%` }}
+                    style={{ width: `${Math.max((row.exposure / maxFormatExposure) * 100, 4)}%` }}
                   />
                 </div>
               </div>
@@ -140,7 +140,7 @@ export function ExposurePage() {
             <thead>
               <tr className="border-b border-slate-100 text-[10px] font-bold uppercase tracking-[0.08em] text-slate-400">
                 <th className="px-5 py-3 font-semibold">Match</th>
-                <th className="px-3 py-3 font-semibold">Sport</th>
+                <th className="px-3 py-3 font-semibold">Format</th>
                 <th className="px-5 py-3 text-right font-semibold">Exposure</th>
               </tr>
             </thead>
@@ -154,7 +154,7 @@ export function ExposurePage() {
                   <td className="px-5 py-3.5 text-[12px] font-semibold text-slate-800">
                     {match.home} vs {match.away}
                   </td>
-                  <td className="px-3 py-3.5 text-[12px] text-slate-600">{match.sport}</td>
+                  <td className="px-3 py-3.5 text-[12px] text-slate-600">{match.format}</td>
                   <td className="px-5 py-3.5 text-right text-[12px] font-medium tabular-nums text-amber-700">
                     {formatINR(match.exposure)}
                   </td>

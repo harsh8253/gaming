@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState, type FormEvent } from 'react';
 import { useOutletContext, useSearchParams } from 'react-router-dom';
 import { Activity, CalendarClock, PlusCircle, Radio, Search, ShieldAlert, Trophy, X } from 'lucide-react';
+import { Matchup, TeamMark } from '../components/cricketUi';
 import { MetricCard, StackTable, StatusBadge } from '../components/deskUi';
 import type { ShellContext } from '../components/WagerDeskShell';
 import {
@@ -9,7 +10,7 @@ import {
   matchStatusTone,
   MOCK_MARKETS,
   MOCK_MATCHES,
-  SPORTS,
+  FORMATS,
   type MatchStatus,
   type MockMatch,
 } from '../lib/mockDesk';
@@ -22,7 +23,7 @@ export function MatchesPage() {
   const [matches, setMatches] = useState<MockMatch[]>(MOCK_MATCHES);
   const [query, setQuery] = useState('');
   const [scope, setScope] = useState<ScopeFilter>('ALL');
-  const [sport, setSport] = useState('ALL');
+  const [format, setFormat] = useState('ALL');
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [addOpen, setAddOpen] = useState(false);
 
@@ -55,10 +56,10 @@ export function MatchesPage() {
       const label = `${match.home} ${match.away} ${match.competition}`.toLowerCase();
       const matchesQuery = !needle || label.includes(needle);
       const matchesScope = scope === 'ALL' || match.status === scope;
-      const matchesSport = sport === 'ALL' || match.sport === sport;
-      return matchesQuery && matchesScope && matchesSport;
+      const matchesFormat = format === 'ALL' || match.format === format;
+      return matchesQuery && matchesScope && matchesFormat;
     });
-  }, [matches, query, scope, sport]);
+  }, [matches, query, scope, format]);
 
   const selected = matches.find((m) => m.id === selectedId) ?? null;
   const selectedMarkets = selected ? MOCK_MARKETS.filter((m) => m.matchId === selected.id) : [];
@@ -78,13 +79,13 @@ export function MatchesPage() {
   function clearFilters() {
     setQuery('');
     setScope('ALL');
-    setSport('ALL');
+    setFormat('ALL');
   }
 
   function handleAddMatch(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
-    const sportValue = String(form.get('sport') ?? SPORTS[0]);
+    const formatValue = FORMATS.find((f) => f === form.get('format')) ?? FORMATS[0];
     const home = String(form.get('home') ?? '').trim();
     const away = String(form.get('away') ?? '').trim();
     const competition = String(form.get('competition') ?? '').trim();
@@ -93,7 +94,7 @@ export function MatchesPage() {
 
     const match: MockMatch = {
       id: `MTC-${1200 + matches.length}`,
-      sport: sportValue,
+      format: formatValue,
       home,
       away,
       competition,
@@ -118,7 +119,7 @@ export function MatchesPage() {
             <span className="text-[11px] font-medium text-slate-500">Master network</span>
           </div>
           <h2 className="text-2xl font-semibold tracking-tight text-slate-950">Matches</h2>
-          <p className="mt-1 text-[13px] text-slate-500">Fixtures open for betting across every sport.</p>
+          <p className="mt-1 text-[13px] text-slate-500">Cricket fixtures open for betting.</p>
         </div>
         <button
           onClick={() => setAddOpen(true)}
@@ -159,13 +160,13 @@ export function MatchesPage() {
             ))}
           </div>
           <select
-            value={sport}
-            onChange={(e) => setSport(e.target.value)}
-            aria-label="Filter by sport"
+            value={format}
+            onChange={(e) => setFormat(e.target.value)}
+            aria-label="Filter by format"
             className="h-9 rounded-lg border border-slate-200 bg-white px-2.5 text-[12px] text-slate-600 outline-none focus:border-blue-300 focus:ring-2 focus:ring-blue-100"
           >
-            <option value="ALL">All sports</option>
-            {SPORTS.map((s) => (
+            <option value="ALL">All formats</option>
+            {FORMATS.map((s) => (
               <option key={s} value={s}>
                 {s}
               </option>
@@ -180,7 +181,7 @@ export function MatchesPage() {
             </span>
             <div>
               <p className="text-[13px] font-semibold text-slate-800">No matches found</p>
-              <p className="mt-1 text-[12px] text-slate-500">Try a different team, competition, sport, or scope.</p>
+              <p className="mt-1 text-[12px] text-slate-500">Try a different team, competition, format, or scope.</p>
             </div>
             <button onClick={clearFilters} className="text-[12px] font-semibold text-blue-600 hover:text-blue-800">
               Clear filters
@@ -192,7 +193,7 @@ export function MatchesPage() {
               <thead>
                 <tr className="border-b border-slate-100 text-[10px] font-bold uppercase tracking-[0.08em] text-slate-400">
                   <th className="px-5 py-3 font-semibold">Match</th>
-                  <th className="px-3 py-3 font-semibold">Sport</th>
+                  <th className="px-3 py-3 font-semibold">Format</th>
                   <th className="px-3 py-3 font-semibold">Competition</th>
                   <th className="px-3 py-3 font-semibold">Start</th>
                   <th className="px-3 py-3 font-semibold">Status</th>
@@ -207,9 +208,9 @@ export function MatchesPage() {
                     className="cursor-pointer border-b border-slate-50 last:border-0 hover:bg-slate-50/70"
                   >
                     <td className="px-5 py-3.5 text-[12px] font-semibold text-slate-800">
-                      {match.home} vs {match.away}
+                      <Matchup home={match.home} away={match.away} />
                     </td>
-                    <td className="px-3 py-3.5 text-[12px] text-slate-600">{match.sport}</td>
+                    <td className="px-3 py-3.5 text-[12px] text-slate-600">{match.format}</td>
                     <td className="px-3 py-3.5 text-[11px] text-slate-500">{match.competition}</td>
                     <td className="px-3 py-3.5 text-[11px] text-slate-500">{match.startTime}</td>
                     <td className="px-3 py-3.5">
@@ -241,11 +242,16 @@ export function MatchesPage() {
           >
             <div className="flex items-start justify-between gap-3 border-b border-slate-100 px-6 py-5">
               <div>
+                <div className="mb-3 flex items-center gap-3">
+                  <TeamMark team={{ id: selected.home, name: selected.home }} size="lg" />
+                  <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-400">vs</span>
+                  <TeamMark team={{ id: selected.away, name: selected.away }} size="lg" />
+                </div>
                 <p className="text-[15px] font-semibold text-slate-950">
                   {selected.home} vs {selected.away}
                 </p>
                 <p className="mt-0.5 text-[11px] text-slate-400">
-                  {selected.sport} · {selected.competition}
+                  {selected.format} · {selected.competition}
                 </p>
                 <div className="mt-1.5">
                   <StatusBadge tone={matchStatusTone(selected.status)}>{selected.status}</StatusBadge>
@@ -330,12 +336,12 @@ export function MatchesPage() {
             </div>
             <form className="space-y-3" onSubmit={handleAddMatch}>
               <label className="block">
-                <span className="mb-1 block text-[11px] font-semibold text-slate-600">Sport</span>
+                <span className="mb-1 block text-[11px] font-semibold text-slate-600">Format</span>
                 <select
-                  name="sport"
+                  name="format"
                   className="h-9 w-full rounded-lg border border-slate-200 px-3 text-[12px] outline-none focus:border-blue-300 focus:ring-2 focus:ring-blue-100"
                 >
-                  {SPORTS.map((s) => (
+                  {FORMATS.map((s) => (
                     <option key={s} value={s}>
                       {s}
                     </option>

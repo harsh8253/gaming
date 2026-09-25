@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { AlertTriangle, ChevronRight, RefreshCw, SearchX } from 'lucide-react';
 import { StatusBadge } from './deskUi';
@@ -15,6 +15,7 @@ import {
   statusTone,
   teamCode,
 } from '../lib/cricket';
+import { teamLogo } from '../lib/teamLogos';
 import type { EventWithStatus, Team } from '../types/cricket';
 
 export function CricketSubnav() {
@@ -148,14 +149,84 @@ function toneFor(id: string): string {
   return MARK_TONES[hash % MARK_TONES.length];
 }
 
-export function TeamMark({ team, size = 'md' }: { team?: Team; size?: 'sm' | 'md' | 'lg' }) {
-  const sizes = { sm: 'h-6 w-9 text-[9px]', md: 'h-8 w-11 text-[10px]', lg: 'h-12 w-16 text-[13px]' };
+const MARK_SIZES = {
+  xs: 'h-5 w-7 text-[8px]',
+  sm: 'h-6 w-9 text-[9px]',
+  md: 'h-8 w-11 text-[10px]',
+  lg: 'h-12 w-16 text-[13px]',
+};
+
+export function TeamMark({ team, size = 'md' }: { team?: Team; size?: keyof typeof MARK_SIZES }) {
+  const logo = teamLogo(team);
+  const [failedSrc, setFailedSrc] = useState<string | null>(null);
+
+  if (logo && failedSrc !== logo.src) {
+    return (
+      <span
+        aria-hidden="true"
+        className={`flex shrink-0 items-center justify-center overflow-hidden rounded-md ${MARK_SIZES[size]} ${logo.kind === 'flag' ? 'ring-1 ring-slate-200' : 'bg-white p-0.5 ring-1 ring-slate-100'}`}
+      >
+        <img
+          src={logo.src}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          referrerPolicy="no-referrer"
+          onError={() => setFailedSrc(logo.src)}
+          className={logo.kind === 'flag' ? 'size-full object-cover' : 'size-full object-contain'}
+        />
+      </span>
+    );
+  }
+
   return (
     <span
       aria-hidden="true"
-      className={`flex shrink-0 items-center justify-center rounded-md font-bold tracking-[0.04em] ${sizes[size]} ${team ? toneFor(team.id) : 'bg-slate-100 text-slate-400'}`}
+      className={`flex shrink-0 items-center justify-center rounded-md font-bold tracking-[0.04em] ${MARK_SIZES[size]} ${team ? toneFor(team.id) : 'bg-slate-100 text-slate-400'}`}
     >
       {teamCode(team)}
+    </span>
+  );
+}
+
+/** Desk records name teams as plain strings; this gives them the same badge as feed teams. */
+function namedTeam(name: string): Team {
+  return { id: name, name };
+}
+
+/** A fixture label with team badges: stacked rows for tables, or a compact inline pair. */
+export function Matchup({
+  home,
+  away,
+  layout = 'stacked',
+  className = '',
+}: {
+  home: string;
+  away: string;
+  layout?: 'stacked' | 'inline';
+  className?: string;
+}) {
+  if (layout === 'inline') {
+    return (
+      <span className={`flex min-w-0 items-center gap-2 ${className}`}>
+        <span className="flex shrink-0 items-center -space-x-1.5">
+          <TeamMark team={namedTeam(home)} size="xs" />
+          <TeamMark team={namedTeam(away)} size="xs" />
+        </span>
+        <span className="min-w-0">
+          {home} <span className="font-normal text-slate-400">vs</span> {away}
+        </span>
+      </span>
+    );
+  }
+  return (
+    <span className={`flex flex-col gap-1.5 ${className}`}>
+      {[home, away].map((name) => (
+        <span key={name} className="flex min-w-0 items-center gap-2">
+          <TeamMark team={namedTeam(name)} size="xs" />
+          <span className="min-w-0 truncate">{name}</span>
+        </span>
+      ))}
     </span>
   );
 }

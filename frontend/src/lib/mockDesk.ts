@@ -90,11 +90,14 @@ export const MOCK_CLIENTS: MockClient[] = RAW_CLIENTS.map(
 
 export type BetStatus = 'OPEN' | 'PENDING' | 'ACCEPTED' | 'SETTLED_WON' | 'SETTLED_LOST' | 'VOID';
 
+export const FORMATS = ['T20', 'ODI', 'Test'] as const;
+export type CricketFormat = (typeof FORMATS)[number];
+
 export type MockBet = {
   id: string;
   client: string;
   clientId: string;
-  sport: string;
+  format: CricketFormat;
   match: string;
   market: string;
   selection: string;
@@ -105,8 +108,6 @@ export type MockBet = {
   status: BetStatus;
   placedAt: string;
 };
-
-export const SPORTS = ['Cricket', 'Football', 'Basketball', 'Tennis', 'Kabaddi'];
 
 export function betStatusTone(status: BetStatus): 'green' | 'amber' | 'red' | 'blue' | 'slate' {
   switch (status) {
@@ -126,7 +127,7 @@ export function betStatusTone(status: BetStatus): 'green' | 'amber' | 'red' | 'b
 
 const RAW_BETS: [
   clientIndex: number,
-  sport: string,
+  format: CricketFormat,
   match: string,
   market: string,
   selection: string,
@@ -135,40 +136,40 @@ const RAW_BETS: [
   status: BetStatus,
   placedAt: string,
 ][] = [
-  [0, 'Cricket', 'India vs Australia', 'Match Winner', 'India', 1.85, 25000, 'OPEN', 'Today, 10:42 AM'],
-  [2, 'Football', 'Arsenal vs Chelsea', 'Over / Under 2.5', 'Over 2.5', 1.92, 18500, 'OPEN', 'Today, 10:31 AM'],
-  [1, 'Basketball', 'Lakers vs Celtics', 'Moneyline', 'Celtics', 2.1, 12000, 'PENDING', 'Today, 10:18 AM'],
-  [3, 'Football', 'Real Madrid vs Barcelona', 'Both Teams to Score', 'Yes', 1.65, 8000, 'ACCEPTED', 'Today, 9:54 AM'],
-  [6, 'Cricket', 'Mumbai Indians vs CSK', 'Top Batter', 'Rohit Sharma', 4.5, 15500, 'OPEN', 'Today, 9:40 AM'],
-  [9, 'Football', 'Man City vs Liverpool', 'Correct Score', '2-1', 8.0, 21000, 'PENDING', 'Today, 9:22 AM'],
-  [4, 'Tennis', 'Djokovic vs Alcaraz', 'Set Winner', 'Alcaraz', 2.3, 14000, 'OPEN', 'Today, 8:58 AM'],
-  [5, 'Kabaddi', 'Patna Pirates vs Bengal Warriors', 'Match Winner', 'Patna Pirates', 1.75, 6000, 'SETTLED_WON', 'Yesterday, 8:10 PM'],
-  [7, 'Basketball', 'Warriors vs Suns', 'Total Points Over/Under', 'Over 224.5', 1.9, 9500, 'ACCEPTED', 'Today, 8:30 AM'],
-  [10, 'Cricket', 'RCB vs KKR', 'Match Winner', 'RCB', 2.05, 11000, 'OPEN', 'Today, 8:05 AM'],
-  [11, 'Football', 'PSG vs Bayern Munich', 'Match Winner', 'PSG', 2.5, 16500, 'PENDING', 'Today, 7:48 AM'],
-  [12, 'Cricket', 'Australia vs England', 'Top Bowler', 'Pat Cummins', 3.75, 7000, 'SETTLED_LOST', 'Yesterday, 6:20 PM'],
-  [13, 'Tennis', 'Swiatek vs Sabalenka', 'Match Winner', 'Swiatek', 1.7, 9000, 'SETTLED_WON', 'Yesterday, 4:45 PM'],
-  [14, 'Basketball', 'Nuggets vs Bucks', 'Moneyline', 'Nuggets', 1.95, 13500, 'OPEN', 'Today, 7:15 AM'],
-  [15, 'Football', 'Inter Milan vs AC Milan', 'Over / Under 2.5', 'Under 2.5', 2.0, 10000, 'ACCEPTED', 'Today, 6:52 AM'],
-  [16, 'Cricket', 'Delhi Capitals vs SRH', 'Match Winner', 'SRH', 1.8, 5500, 'VOID', 'Yesterday, 3:10 PM'],
-  [17, 'Kabaddi', 'U Mumba vs Jaipur Pink Panthers', 'Match Winner', 'U Mumba', 1.9, 4800, 'OPEN', 'Today, 6:20 AM'],
-  [19, 'Tennis', 'Medvedev vs Sinner', 'Set Winner', 'Sinner', 1.6, 12500, 'PENDING', 'Today, 5:55 AM'],
-  [20, 'Football', 'Barcelona vs Atletico Madrid', 'Match Winner', 'Barcelona', 1.55, 19000, 'SETTLED_WON', 'Yesterday, 2:30 PM'],
-  [21, 'Cricket', 'New Zealand vs South Africa', 'Match Winner', 'New Zealand', 2.2, 17500, 'OPEN', 'Today, 5:10 AM'],
-  [22, 'Basketball', 'Heat vs Knicks', 'Moneyline', 'Knicks', 1.88, 6500, 'VOID', 'Yesterday, 1:05 PM'],
-  [23, 'Football', 'Borussia Dortmund vs RB Leipzig', 'Both Teams to Score', 'Yes', 1.72, 8800, 'ACCEPTED', 'Today, 4:40 AM'],
-  [8, 'Cricket', 'Pakistan vs Sri Lanka', 'Top Batter', 'Babar Azam', 3.2, 5000, 'SETTLED_LOST', 'Yesterday, 11:20 AM'],
-  [18, 'Tennis', 'Gauff vs Rybakina', 'Match Winner', 'Gauff', 2.4, 3200, 'OPEN', 'Today, 4:05 AM'],
+  [0, 'Test', 'India vs Australia', 'Match Result', 'India', 1.85, 25000, 'OPEN', 'Today, 10:42 AM'],
+  [2, 'ODI', 'England vs Pakistan', 'Total Runs Over/Under', 'Over 295.5', 1.92, 18500, 'OPEN', 'Today, 10:31 AM'],
+  [1, 'T20', 'Sydney Sixers vs Perth Scorchers', 'Match Winner', 'Perth Scorchers', 2.1, 12000, 'PENDING', 'Today, 10:18 AM'],
+  [3, 'T20', 'Rajasthan Royals vs Gujarat Titans', 'Toss Winner', 'Rajasthan Royals', 1.9, 8000, 'ACCEPTED', 'Today, 9:54 AM'],
+  [6, 'T20', 'Mumbai Indians vs Chennai Super Kings', 'Top Batter', 'Rohit Sharma', 4.5, 15500, 'OPEN', 'Today, 9:40 AM'],
+  [9, 'T20', 'Lahore Qalandars vs Karachi Kings', 'Most Sixes', 'Fakhar Zaman', 5.5, 21000, 'PENDING', 'Today, 9:22 AM'],
+  [4, 'ODI', 'South Africa vs West Indies', 'Match Winner', 'South Africa', 1.6, 14000, 'OPEN', 'Today, 8:58 AM'],
+  [5, 'ODI', 'Australia vs England', 'Match Winner', 'Australia', 1.75, 6000, 'SETTLED_WON', 'Yesterday, 8:40 AM'],
+  [7, 'T20', 'Sydney Sixers vs Perth Scorchers', 'Powerplay Runs', 'Over 48.5', 1.9, 9500, 'ACCEPTED', 'Today, 8:30 AM'],
+  [10, 'T20', 'Royal Challengers Bengaluru vs Kolkata Knight Riders', 'Match Winner', 'Royal Challengers Bengaluru', 2.05, 11000, 'SETTLED_WON', 'Yesterday, 7:05 PM'],
+  [11, 'T20', 'Punjab Kings vs Lucknow Super Giants', 'Match Winner', 'Punjab Kings', 2.5, 16500, 'PENDING', 'Today, 7:48 AM'],
+  [12, 'ODI', 'Australia vs England', 'Top Bowler', 'Pat Cummins', 3.75, 7000, 'SETTLED_LOST', 'Yesterday, 8:20 AM'],
+  [13, 'T20', 'Delhi Capitals vs Sunrisers Hyderabad', 'Match Winner', 'Sunrisers Hyderabad', 1.7, 9000, 'SETTLED_WON', 'Yesterday, 3:05 PM'],
+  [14, 'Test', 'New Zealand vs Bangladesh', 'Match Result', 'New Zealand', 1.45, 13500, 'OPEN', 'Today, 7:15 AM'],
+  [15, 'Test', 'India vs Australia', 'Session Runs', 'Under 92.5', 2.0, 10000, 'ACCEPTED', 'Today, 6:52 AM'],
+  [16, 'T20', 'Delhi Capitals vs Sunrisers Hyderabad', 'Toss Winner', 'Delhi Capitals', 1.9, 5500, 'VOID', 'Yesterday, 3:10 PM'],
+  [17, 'T20', 'Trinbago Knight Riders vs Guyana Amazon Warriors', 'Match Winner', 'Trinbago Knight Riders', 1.9, 4800, 'OPEN', 'Today, 6:20 AM'],
+  [19, 'Test', 'India vs Australia', 'Top Batter', 'Virat Kohli', 3.6, 12500, 'PENDING', 'Today, 5:55 AM'],
+  [20, 'T20', 'Royal Challengers Bengaluru vs Kolkata Knight Riders', 'Total Runs Over/Under', 'Over 189.5', 1.85, 19000, 'SETTLED_WON', 'Yesterday, 2:30 PM'],
+  [21, 'ODI', 'England vs Pakistan', 'Match Winner', 'Pakistan', 2.2, 17500, 'OPEN', 'Today, 5:10 AM'],
+  [22, 'T20', 'Delhi Capitals vs Sunrisers Hyderabad', 'Most Sixes', 'Abhishek Sharma', 4.2, 6500, 'VOID', 'Yesterday, 1:05 PM'],
+  [23, 'T20', 'Punjab Kings vs Lucknow Super Giants', 'Toss Winner', 'Lucknow Super Giants', 1.9, 8800, 'ACCEPTED', 'Today, 4:40 AM'],
+  [8, 'ODI', 'Pakistan vs Sri Lanka', 'Top Batter', 'Babar Azam', 3.2, 5000, 'SETTLED_LOST', 'Yesterday, 10:20 AM'],
+  [18, 'T20', 'Lahore Qalandars vs Karachi Kings', 'Match Winner', 'Karachi Kings', 2.4, 3200, 'OPEN', 'Today, 4:05 AM'],
 ];
 
 export const MOCK_BETS: MockBet[] = RAW_BETS.map(
-  ([clientIndex, sport, match, market, selection, odds, stake, status, placedAt], index) => {
+  ([clientIndex, format, match, market, selection, odds, stake, status, placedAt], index) => {
     const client = MOCK_CLIENTS[clientIndex]!;
     return {
       id: `BET-${String(864 - index).padStart(4, '0')}`,
       client: client.name,
       clientId: client.id,
-      sport,
+      format,
       match,
       market,
       selection,
@@ -190,7 +191,7 @@ export type MatchStatus = 'UPCOMING' | 'LIVE' | 'FINISHED';
 
 export type MockMatch = {
   id: string;
-  sport: string;
+  format: CricketFormat;
   home: string;
   away: string;
   competition: string;
@@ -200,7 +201,7 @@ export type MockMatch = {
 };
 
 const RAW_MATCHES: [
-  sport: string,
+  format: CricketFormat,
   home: string,
   away: string,
   competition: string,
@@ -208,26 +209,26 @@ const RAW_MATCHES: [
   status: MatchStatus,
   exposure: number,
 ][] = [
-  ['Cricket', 'India', 'Australia', 'Border-Gavaskar Trophy', 'Live · 32.4 overs', 'LIVE', 158250],
-  ['Football', 'Arsenal', 'Chelsea', 'Premier League', 'Live · 63\'', 'LIVE', 92400],
-  ['Basketball', 'Lakers', 'Celtics', 'NBA Regular Season', 'Live · Q3 4:12', 'LIVE', 41000],
-  ['Football', 'Real Madrid', 'Barcelona', 'La Liga', 'Today, 8:00 PM', 'UPCOMING', 68000],
-  ['Cricket', 'Mumbai Indians', 'Chennai Super Kings', 'IPL', 'Today, 7:30 PM', 'UPCOMING', 155000],
-  ['Tennis', 'Djokovic', 'Alcaraz', 'ATP Masters Final', 'Today, 6:00 PM', 'UPCOMING', 44000],
-  ['Football', 'Man City', 'Liverpool', 'Premier League', 'Today, 9:30 PM', 'UPCOMING', 71000],
-  ['Kabaddi', 'Patna Pirates', 'Bengal Warriors', 'Pro Kabaddi League', 'Tomorrow, 8:00 PM', 'UPCOMING', 6000],
-  ['Basketball', 'Warriors', 'Suns', 'NBA Regular Season', 'Tomorrow, 6:30 AM', 'UPCOMING', 9500],
-  ['Cricket', 'Royal Challengers Bengaluru', 'Kolkata Knight Riders', 'IPL', 'Yesterday, 7:30 PM', 'FINISHED', 0],
-  ['Football', 'PSG', 'Bayern Munich', 'UEFA Champions League', 'Yesterday, 8:15 PM', 'FINISHED', 0],
-  ['Tennis', 'Swiatek', 'Sabalenka', 'WTA Finals', 'Yesterday, 4:30 PM', 'FINISHED', 0],
-  ['Cricket', 'Pakistan', 'Sri Lanka', 'Asia Cup', 'Yesterday, 11:00 AM', 'FINISHED', 0],
-  ['Football', 'Borussia Dortmund', 'RB Leipzig', 'Bundesliga', 'Today, 4:40 AM', 'UPCOMING', 8800],
+  ['Test', 'India', 'Australia', 'Border-Gavaskar Trophy', 'Live · Day 2, 32.4 ov', 'LIVE', 158250],
+  ['ODI', 'England', 'Pakistan', 'ODI Series', 'Live · 38.1 ov', 'LIVE', 92400],
+  ['T20', 'Sydney Sixers', 'Perth Scorchers', 'Big Bash League', 'Live · 14.3 ov', 'LIVE', 41000],
+  ['T20', 'Rajasthan Royals', 'Gujarat Titans', 'IPL', 'Today, 3:30 PM', 'UPCOMING', 68000],
+  ['T20', 'Mumbai Indians', 'Chennai Super Kings', 'IPL', 'Today, 7:30 PM', 'UPCOMING', 155000],
+  ['ODI', 'South Africa', 'West Indies', 'ODI Series', 'Today, 1:30 PM', 'UPCOMING', 44000],
+  ['T20', 'Lahore Qalandars', 'Karachi Kings', 'Pakistan Super League', 'Today, 9:00 PM', 'UPCOMING', 71000],
+  ['T20', 'Trinbago Knight Riders', 'Guyana Amazon Warriors', 'Caribbean Premier League', 'Tomorrow, 4:30 AM', 'UPCOMING', 6000],
+  ['Test', 'New Zealand', 'Bangladesh', 'Test Series', 'Tomorrow, 3:30 AM', 'UPCOMING', 9500],
+  ['T20', 'Royal Challengers Bengaluru', 'Kolkata Knight Riders', 'IPL', 'Yesterday, 7:30 PM', 'FINISHED', 0],
+  ['T20', 'Delhi Capitals', 'Sunrisers Hyderabad', 'IPL', 'Yesterday, 3:30 PM', 'FINISHED', 0],
+  ['ODI', 'Australia', 'England', 'ODI Series', 'Yesterday, 9:00 AM', 'FINISHED', 0],
+  ['ODI', 'Pakistan', 'Sri Lanka', 'Asia Cup', 'Yesterday, 11:00 AM', 'FINISHED', 0],
+  ['T20', 'Punjab Kings', 'Lucknow Super Giants', 'IPL', 'Tomorrow, 7:30 PM', 'UPCOMING', 8800],
 ];
 
 export const MOCK_MATCHES: MockMatch[] = RAW_MATCHES.map(
-  ([sport, home, away, competition, startTime, status, exposure], index) => ({
+  ([format, home, away, competition, startTime, status, exposure], index) => ({
     id: `MTC-${String(1200 + index)}`,
-    sport,
+    format,
     home,
     away,
     competition,
@@ -251,7 +252,7 @@ export type MockMarket = {
   id: string;
   matchId: string;
   match: string;
-  sport: string;
+  format: CricketFormat;
   marketType: string;
   status: MarketStatus;
   betsCount: number;
@@ -259,25 +260,25 @@ export type MockMarket = {
 };
 
 const RAW_MARKETS: [matchIndex: number, marketType: string, status: MarketStatus, betsCount: number, exposure: number][] = [
-  [0, 'Match Winner', 'OPEN', 18, 82500],
-  [0, 'Total Runs Over/Under', 'OPEN', 9, 41300],
+  [0, 'Match Result', 'OPEN', 18, 82500],
+  [0, 'Session Runs', 'OPEN', 9, 41300],
   [0, 'Top Batter', 'SUSPENDED', 5, 34450],
   [1, 'Match Winner', 'OPEN', 14, 52400],
-  [1, 'Over / Under 2.5', 'OPEN', 11, 40000],
-  [2, 'Moneyline', 'OPEN', 8, 28000],
-  [2, 'Total Points Over/Under', 'OPEN', 6, 13000],
+  [1, 'Total Runs Over/Under', 'OPEN', 11, 40000],
+  [2, 'Match Winner', 'OPEN', 8, 28000],
+  [2, 'Powerplay Runs', 'OPEN', 6, 13000],
   [3, 'Match Winner', 'OPEN', 4, 38000],
-  [3, 'Both Teams to Score', 'OPEN', 3, 30000],
+  [3, 'Toss Winner', 'OPEN', 3, 30000],
   [4, 'Match Winner', 'OPEN', 22, 98000],
   [4, 'Top Batter', 'OPEN', 7, 57000],
-  [5, 'Set Winner', 'OPEN', 5, 44000],
+  [5, 'Match Winner', 'OPEN', 5, 44000],
   [6, 'Match Winner', 'OPEN', 6, 41000],
-  [6, 'Correct Score', 'SUSPENDED', 3, 30000],
+  [6, 'Most Sixes', 'SUSPENDED', 3, 30000],
   [7, 'Match Winner', 'OPEN', 2, 6000],
-  [8, 'Total Points Over/Under', 'OPEN', 3, 9500],
+  [8, 'Match Result', 'OPEN', 3, 9500],
   [9, 'Match Winner', 'SETTLED', 12, 0],
   [10, 'Match Winner', 'SETTLED', 9, 0],
-  [13, 'Both Teams to Score', 'OPEN', 4, 8800],
+  [13, 'Top Bowler', 'OPEN', 4, 8800],
 ];
 
 export const MOCK_MARKETS: MockMarket[] = RAW_MARKETS.map(
@@ -287,7 +288,7 @@ export const MOCK_MARKETS: MockMarket[] = RAW_MARKETS.map(
       id: `MKT-${String(3400 + index)}`,
       matchId: match.id,
       match: `${match.home} vs ${match.away}`,
-      sport: match.sport,
+      format: match.format,
       marketType,
       status,
       betsCount,
@@ -309,7 +310,7 @@ export type SettlementStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
 export type MockSettlement = {
   id: string;
   match: string;
-  sport: string;
+  format: CricketFormat;
   betsCount: number;
   totalPayout: number;
   status: SettlementStatus;
@@ -319,28 +320,28 @@ export type MockSettlement = {
 
 const RAW_SETTLEMENTS: [
   match: string,
-  sport: string,
+  format: CricketFormat,
   betsCount: number,
   totalPayout: number,
   status: SettlementStatus,
   requestedAt: string,
   requestedBy: string,
 ][] = [
-  ['Patna Pirates vs Bengal Warriors', 'Kabaddi', 14, 46500, 'PENDING', 'Yesterday, 9:05 PM', 'A. Rao'],
-  ['Australia vs England', 'Cricket', 22, 118400, 'PENDING', 'Yesterday, 7:10 PM', 'S. Iyer'],
-  ['Swiatek vs Sabalenka', 'Tennis', 9, 31200, 'PENDING', 'Yesterday, 5:40 PM', 'K. Malhotra'],
-  ['Barcelona vs Atletico Madrid', 'Football', 17, 76800, 'APPROVED', 'Yesterday, 3:20 PM', 'A. Rao'],
-  ['Pakistan vs Sri Lanka', 'Cricket', 11, 28900, 'APPROVED', 'Yesterday, 12:15 PM', 'S. Iyer'],
-  ['Royal Challengers Bengaluru vs Kolkata Knight Riders', 'Cricket', 26, 142300, 'APPROVED', '2 days ago', 'A. Rao'],
-  ['PSG vs Bayern Munich', 'Football', 19, 89500, 'REJECTED', '2 days ago', 'K. Malhotra'],
-  ['Heat vs Knicks', 'Basketball', 6, 15200, 'PENDING', 'Today, 1:05 AM', 'S. Iyer'],
+  ['Delhi Capitals vs Sunrisers Hyderabad', 'T20', 14, 46500, 'PENDING', 'Yesterday, 9:05 PM', 'A. Rao'],
+  ['Australia vs England', 'ODI', 22, 118400, 'PENDING', 'Yesterday, 7:10 PM', 'S. Iyer'],
+  ['Sri Lanka vs Afghanistan', 'T20', 9, 31200, 'PENDING', 'Yesterday, 5:40 PM', 'K. Malhotra'],
+  ['Gujarat Titans vs Punjab Kings', 'T20', 17, 76800, 'APPROVED', 'Yesterday, 3:20 PM', 'A. Rao'],
+  ['Pakistan vs Sri Lanka', 'ODI', 11, 28900, 'APPROVED', 'Yesterday, 12:15 PM', 'S. Iyer'],
+  ['Royal Challengers Bengaluru vs Kolkata Knight Riders', 'T20', 26, 142300, 'APPROVED', 'Yesterday, 11:50 PM', 'A. Rao'],
+  ['England vs India', 'Test', 19, 89500, 'REJECTED', '2 days ago', 'K. Malhotra'],
+  ['Multan Sultans vs Islamabad United', 'T20', 6, 15200, 'PENDING', 'Today, 1:05 AM', 'S. Iyer'],
 ];
 
 export const MOCK_SETTLEMENTS: MockSettlement[] = RAW_SETTLEMENTS.map(
-  ([match, sport, betsCount, totalPayout, status, requestedAt, requestedBy], index) => ({
+  ([match, format, betsCount, totalPayout, status, requestedAt, requestedBy], index) => ({
     id: `STL-${String(19 - index).padStart(3, '0')}`,
     match,
-    sport,
+    format,
     betsCount,
     totalPayout,
     status,
@@ -492,7 +493,7 @@ export type ReportCatalogEntry = {
 
 export const REPORT_CATALOG: ReportCatalogEntry[] = [
   { id: 'client-activity', name: 'Client Activity Report', description: 'Bets, deposits, and position changes per client over a date range.' },
-  { id: 'settlement-summary', name: 'Settlement Summary', description: 'Approved and rejected settlements with payout totals by sport.' },
+  { id: 'settlement-summary', name: 'Settlement Summary', description: 'Approved and rejected settlements with payout totals by match format.' },
   { id: 'cash-flow', name: 'Cash Flow Report', description: 'Opening, received, paid, and reconciled cash across sessions.' },
   { id: 'commission', name: 'Commission Report', description: 'Commission earned and paid per master for a selected period.' },
   { id: 'audit-export', name: 'Audit Export', description: 'Full audit trail export for compliance and internal review.' },
@@ -550,7 +551,7 @@ const RAW_AUDIT: [actor: string, role: string, action: string, target: string, c
   ['K. Malhotra', 'Master', 'Rejected settlement', 'STL-013', 'FINANCIAL', 'Yesterday, 8:40 PM', '10.4.4.61'],
   ['Super Admin A', 'Super Admin', 'Updated commission rule', 'RULE-03', 'FINANCIAL', 'Yesterday, 4:15 PM', '10.4.2.18'],
   ['A. Rao', 'Master', 'Opened cash session', 'CSH-101', 'OPERATIONS', 'Yesterday, 9:00 AM', '10.4.2.44'],
-  ['Super Admin A', 'Super Admin', 'Suspended market', 'MKT-3413 (Correct Score)', 'OPERATIONS', 'Yesterday, 7:30 AM', '10.4.2.18'],
+  ['Super Admin A', 'Super Admin', 'Suspended market', 'MKT-3413 (Most Sixes)', 'OPERATIONS', 'Yesterday, 7:30 AM', '10.4.2.18'],
   ['S. Iyer', 'Master', 'Reversed ledger journal', 'JRNL-2270', 'FINANCIAL', '2 days ago', '10.4.3.9'],
   ['Super Admin A', 'Super Admin', 'Changed session timeout', 'Security settings', 'SECURITY', '2 days ago', '10.4.2.18'],
   ['K. Malhotra', 'Master', 'Suspended client', 'Aakash Bansal (CLI-1060)', 'HIERARCHY', '3 days ago', '10.4.4.61'],

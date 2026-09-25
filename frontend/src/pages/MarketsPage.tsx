@@ -93,7 +93,7 @@ export function MarketsPage() {
       id: `MKT-${3400 + markets.length}`,
       matchId: match.id,
       match: `${match.home} vs ${match.away}`,
-      sport: match.sport,
+      format: match.format,
       marketType,
       status: 'OPEN',
       betsCount: 0,
@@ -193,7 +193,7 @@ export function MarketsPage() {
                     <td className="px-5 py-3.5 text-[12px] font-semibold text-slate-800">{market.marketType}</td>
                     <td className="px-3 py-3.5">
                       <p className="text-[12px] font-medium text-slate-700">{market.match}</p>
-                      <p className="mt-0.5 text-[10px] text-slate-400">{market.sport}</p>
+                      <p className="mt-0.5 text-[10px] text-slate-400">{market.format}</p>
                     </td>
                     <td className="px-3 py-3.5">
                       <StatusBadge tone={marketStatusTone(market.status)}>{market.status}</StatusBadge>
@@ -249,7 +249,7 @@ export function MarketsPage() {
               >
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-[12px] font-semibold text-slate-800">{selected.match}</p>
-                  <p className="text-[10px] text-slate-400">{selected.sport} · View match</p>
+                  <p className="text-[10px] text-slate-400">{selected.format} · View match</p>
                 </div>
                 <ChevronRight size={14} className="shrink-0 text-slate-300" />
               </button>
